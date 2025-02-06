@@ -1,0 +1,218 @@
+<!doctype html>
+{% extends "bootstrap/base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{% block head %}
+{{ super() }}
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+
+{% block scripts %}
+{{super() }}
+<script src="https://cdn.datatables.net/v/dt/dt-2.2.1/sl-3.0.0/datatables.min.js""></script>
+    <script>
+        var table;
+        $(document).ready(function() {
+        table = new DataTable('#article-list', 
+        {
+            columnDefs: [
+                {
+                    orderable: false,
+                    render: DataTable.render.select(),
+                    targets: 0
+                },
+                {
+                    data : 'id',
+                    targets: 1
+                }
+            ],
+            select : {style: ['os,', 'multi']}
+        });
+});
+    </script>
+<script>
+    function export_selected() {
+    const selectedRowsData = table.rows({ selected: true }).data();
+    const ids = Array.from(selectedRowsData, row => row.id);
+    if (!ids.length) {
+        alert('No rows selected.');
+        return;
+    }
+
+    fetch('/export', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({ ids })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle success response, for example:
+        console.log('Export successful:', data);
+        if (data.url) {
+            const link = document.createElement('a');
+            link.href = data.url;
+            link.download = 'export.xlsx';  // You can change the suggested filename
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert('Export successful, but no download URL found.');
+        }
+
+    })
+    .catch(error => {
+        console.error('Error occurred:', error);
+        alert('Error exporting data. Check console for details.');
+    });
+}
+</script>
+
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-2.2.1/sl-3.0.0/datatables.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>
+        <img src={{ url_for('static', filename="logo-meta_new.png" ) }} style="max-width: 120px; display: inline-block">
+        <span class = "site-title"> X-PHI Transparency & Quality of Reporting Inventory</span>
+    </h1>
+
+    {% if current_user.is_authenticated %}
+
+    <p>
+        <a href="{{ url_for('logout') }}"> Logout ({{ current_user.username }}) </a>
+    </p>
+
+    <h4> Articles </h4>
+
+    <table id="article-list" class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    ID
+                </th>
+
+                <th>
+                    Short Name
+                </th>
+
+                <th>
+                    Author
+                </th>
+
+                <th>
+                    Created
+                </th>
+
+                <th>
+                    Modified
+                </th>
+
+                <th>
+                </th>
+
+                <th>
+                </th>
+
+                <th>
+                </th>
+
+                <th>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="searchable">
+
+            {% for article in available_articles %}
+            <tr>
+                <td></td>
+                <td> {{ article.id }} </td>
+                <td> {{ article.short }} </td>
+                <td> {{ article.author.username }} </td>
+                <td> {{ article.created_date.strftime('%Y-%m-%d %H:%M:%S') }} </td>
+                <td> {{ article.modified_date.strftime('%Y-%m-%d %H:%M:%S') }} </td>
+                <td> 
+                    {% if current_user.can_edit(article.id) %}
+                    <a href={{ url_for("edit", id=article.id) }}><button class="btn btn-primary">Edit</button></a>
+                    {% else %}
+                    <a href={{ url_for("edit", id=article.id) }}><button disabled class="btn btn-primary">Edit</button></a>
+                    {% endif %}
+                    
+                </td>
+                <td> 
+                    {% if current_user.can_view(article.id) %}
+                    <a href={{ url_for("view", id=article.id) }}> <button class="btn btn-info">View</button></a> </td>
+                    {% else %}
+                    <a href={{ url_for("view", id=article.id) }}> <button disabled class="btn btn-info">View</button></a> </td>
+                    {% endif %}
+                <td> 
+                    {% if current_user.can_delete(article.id) %}
+                    <a href={{ url_for("delete", id=article.id) }}> <button class="btn btn-danger">Delete</button></a>
+                    {% else %}
+                    <a href={{ url_for("delete", id=article.id) }}> <button disabled class="btn btn-danger">Delete</button></a>
+                    {% endif %}
+                </td>
+
+                <td> 
+                    {% if current_user.can_view(article.id) %}
+                    <a href={{ url_for("_print", id=article.id) }}> <button class="btn btn-info">🖨️</button></a>
+                    {% else %}
+                    <a href={{ url_for("_print", id=article.id) }}> <button disabled class="btn btn-info">🖨️</button></a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button class="btn btn-primary" onclick="export_selected()">Export selected</button>
+    <a href="{{ url_for('compare') }}"><button class="btn btn-primary">Compare responses</button></a>
+    <a id="export-link" href="#" style="display: none;">Download</a>
+
+    <h4> Create new article </h4>
+
+    <form class="form" method="post" role="form" action="{{ url_for('createnew') }}">
+        {{ form.hidden_tag() }}
+
+        {{ wtf.form_field(form.short) }}
+
+        {{ wtf.form_field(form.create, button_map={"create": "primary"}) }}
+    </form>
+
+
+    {% else %}
+
+    <p>
+        You are not signed in.
+    </p>
+
+    <p>
+    <ul>
+        <li>
+            <a href="{{ url_for('login') }}"> Sign in </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('register') }}"> Create a new account </a>
+        </li>
+    </ul>
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}

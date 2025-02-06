@@ -1,0 +1,71 @@
+<!doctype html>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block head %}
+{{ super() }}
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+{% block content %}
+<div class="container" style="margin-top:50px;">
+  <h1>Comparison Results</h1>
+
+  {% if results.total == 0 %}
+    <div class="alert alert-info">
+      <strong>No columns found for comparison.</strong>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <p><strong>Total columns processed:</strong> {{ results.total }}</p>
+      <p><strong>Agreements:</strong> {{ results.agreement_count }}</p>
+      <p><strong>Disagreements:</strong> {{ results.disagreement_count }}</p>
+      <p><strong>Percentage agreement:</strong>
+        {% if results.total > 0 %}
+          {{ (100 * results.agreement_count / results.total) | round(2) }}%
+        {% else %}
+          0%
+        {% endif %}
+      </p>
+    </div>
+  {% endif %}
+
+  {% if results.differences %}
+    <h2>Columns with Differences</h2>
+    {% for diff in results.differences %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <strong>Column:</strong> {{ diff.column_name }} 
+          <span class="text-muted">({{ diff.column_title }})</span>
+        </div>
+        <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Row Index</th>
+                <th>Short</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in diff.rows %}
+                <tr>
+                  <td>{{ row.row_index }}</td>
+                  <td>{{ row.short }}</td>
+                  <td>{{ row.value }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-success">
+      <strong>All columns are in agreement!</strong>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

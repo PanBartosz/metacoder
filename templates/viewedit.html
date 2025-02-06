@@ -1,0 +1,723 @@
+{% extends "bootstrap/base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{% from "macros.html" import rmd, render_info_block, question_block, question_container_block, question_full_block, modal_block with context %}
+
+{% block scripts %}
+{{super() }}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.22.6/dist/bootstrap-table.min.js"></script>
+<script src="{{ url_for('static', filename='validator.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        // Activate the last active tab from local storage
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('#main-nav a[href="' + activeTab + '"]').tab('show');
+        }
+
+        // Store the active tab in local storage when clicked
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            localStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+        $.fn.Modal.prototype.enforceFocus = function () {} 
+    });
+
+    {% if printable %}
+    $(document).ready(function () {
+        $('.panel-body').removeClass('collapse');
+    });
+    $(document).ready(function () {
+        $('.tab-pane').addClass('active');
+    });
+    {% endif %}
+
+    {% if mode == "view" %}
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all input elements on the page
+            var inputs = document.querySelectorAll('input, select, textarea');
+            // Disable each input element
+            inputs.forEach(function (input) {
+                input.disabled = true;
+            });
+        });
+    {% endif %}
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+  // Select all radio inputs
+        const radios = document.querySelectorAll('input[name="kindofstudy"]');
+
+        // Add event listeners to each radio input
+        radios.forEach((radio) => {
+        radio.addEventListener("change", function () {
+            showSection(this.value);
+            });
+        });
+
+  // Function to show/hide sections based on the selected value
+    function showSection(value) {
+        document.getElementById("methodsq-tab").style.display = "none";
+        document.getElementById("methodsnq-tab").style.display = "none";
+
+        if (value === "Q") {
+        document.getElementById("methodsq-tab").style.display = "block";
+        } else if (value === "N") {
+        document.getElementById("methodsnq-tab").style.display = "block";
+        } else if (value === "M") {
+        document.getElementById("methodsq-tab").style.display = "block";
+        document.getElementById("methodsnq-tab").style.display = "block";
+        }
+    }
+
+      const selectedRadio = document.querySelector('input[name="kindofstudy"]:checked');
+      if (selectedRadio) {
+        showSection(selectedRadio.value);
+        }
+
+    });
+
+</script>
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>
+        <img src={{ url_for('static', filename="logo-meta_new.png" ) }} class="logo">
+        <span class="site-title"> X-PHI Transparency & Quality of Reporting Inventory</span>
+    </h1>
+    <a href="{{ url_for('index') }}">
+        <button type="button" class="btn btn-primary">
+            Go back
+        </button>
+    </a>
+
+    {% if current_user.is_authenticated %}
+
+
+    <form class="form" method="post" role="form" action="{{ url_for('edit') }}">
+        {% set ckefields = [] %}
+        {{ form.hidden_tag() }}
+
+        <h2><em>{{ form.short.data }} </em></h2>
+        <ul class="nav nav-tabs" role="tablist" id="main-nav">
+            <li role="presentation" class="active">
+                <a href="#general" data-toggle="tab">
+                    {{ t["nav"]["general"] }}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#transparency" data-toggle="tab">
+                    {{ t["nav"]["transparency"] }}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#methods" data-toggle="tab">
+                    {{ t["nav"]["methods"] }}
+                </a>
+            </li>
+            <li role="presentation" id="methodsnq-tab">
+                <a href="#methodsn" data-toggle="tab">
+                    {{ t["nav"]["methodsn"] }}
+                </a>
+            </li>
+            <li role="presentation" id="methodsq-tab">
+                <a href="#methodsq" data-toggle="tab">
+                    {{ t["nav"]["methodsq"] }}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#results" data-toggle="tab">
+                    {{ t["nav"]["results"] }}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#conclusions" data-toggle="tab">
+                    {{ t["nav"]["conclusions"] }}
+                </a>
+            </li>
+            <li role="presentation">
+                {% if mode == "edit" %}
+                {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
+                <button type="button" id="validate" class="btn btn-primary">
+                    {{ t["nav"]["validate"] }}
+                </button>
+                {% endif %}
+            </li>
+        </ul>
+
+        <div class="tab-content" id="questionnaire">
+            <div class="tab-pane active" id="general">
+                {% markdown %}
+                ## {{ t["nav"]["validate"] }}
+                {% endmarkdown %}
+
+                <h4>{{ "id" | header }} {{ form.id.data }} </h4>
+                {{ wtf.form_field(form.id) }}
+
+                <h4> {{ "short" | header }}</h4>
+
+                {{ wtf.form_field(form.short) }}
+
+                {{ t["q"]["short"]["text"] }}
+
+                <h4>{{ "online-first" | header }}</h4>
+                {% call render_info_block("FOR CODERS", "forcoders-online-first") %}
+{{ "online-first" | forcoders}}
+                {% endcall %}
+
+                <p>
+                    {{ "online-first" | text}}
+                </p>
+
+                {{ wtf.form_field(form.onlinefirst) }}
+
+                <h4>{{ "n_studies" | header }}</h4>
+                {% call render_info_block("FOR CODERS", "forcoders-studyn") %}
+{{ "n_studies" | forcoders}}
+                {% endcall %}
+                <p>
+                {{ "n_studies" | text }}
+                </p>
+
+                {{ wtf.form_field(form.n_studies) }}
+
+                <h4>{{ "first_study" | header }}</h4>
+
+                <p>
+                {{ "first_study" | text }}
+                </p>
+
+                {{ wtf.form_field(form.first_study) }}
+
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.general_comment() }}
+                {{ ckefields.append("general_comment") or '' }}                {% endif %}
+            </div>
+
+            <div class="tab-pane" id="transparency">
+                {{ rmd(t["sections"]["transparency"]) }}
+                {{ rmd(t["sections"]["open_access"]) }}
+                {% call render_info_block("FOR CODERS", "forcoders-oa") %}
+{{ "open_access" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.open_access, form.open_access_e, "open_access_e") }}
+                {{ ckefields.append("open_access_e") or '' }}
+
+                {{ rmd(t["sections"]["preregistration"]) }}
+                {% call render_info_block("FOR CODERS", "forcoder-pereg") %}
+{{ "preregistration" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.preregistration, form.preregistration_e, "preregistration_e") }}
+                {{ ckefields.append("preregistration_e") or '' }}
+                {{ rmd(t["sections"]["availability"]) }}
+                {% markdown %}
+                {{ rmd(t["sections"]["availability_text"]) }}
+                {% endmarkdown %}
+
+                {{ rmd(get_header("statement_of_availability")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-soa") %}
+{{ "statement_of_availability" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.statement_of_availability, form.statement_of_availability_e, "statement_of_availability_e") }}
+                {{ ckefields.append("statement_of_availability_e") or '' }}
+
+                {{ rmd(get_header("materials_availability")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-ma") %}
+{{ "materials_availability" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.materials_availability, form.materials_availability_e, "materials_availability_e") }}
+                {{ ckefields.append("materials_availability_e") or '' }}
+
+                {{ rmd(get_header("data_availability")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-da") %}
+{{ "data_availability" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.data_availability, form.data_availability_e, "data_availability_e") }}
+                {{ ckefields.append("data_availability_e") or '' }}
+
+                {{ rmd(get_header("code_availability")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-ca") %}
+{{ "code_availability" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.code_availability, form.code_availability_e, "code_availability_e") }}
+                {{ ckefields.append("code_availability_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.transparency_comment() }}
+                {{ ckefields.append("transparency_comment") or '' }}                {% endif %}
+            </div>
+            <div class="tab-pane" id="methods">
+                {{ rmd(t["sections"]["methods"]) }}
+
+                {{ rmd(t["sections"]["theoretical_background"]) }}
+
+                {% call render_info_block("FOR CODERS", "forcoders-background") %}
+{{ "theoretical_background" | forcoders}}
+                {% endcall %}
+
+                {{ rmd(get_header("background1")) }}
+
+                {{ question_full_block(form.background1, form.background1_e, "background1_e") }}
+                {{ ckefields.append("background1_e") or '' }}
+                {{ rmd(get_header("background2")) }}
+
+                {{ question_full_block(form.background2, form.background2_e, "background2_e") }}
+                {{ ckefields.append("background2_e") or '' }}
+                {{ rmd(get_header("background3")) }}
+
+                {{ question_full_block(form.background3, form.background3_e, "background3_e") }}
+                {{ ckefields.append("background3_e") or '' }}
+                {{ rmd(get_header("background4")) }}
+
+                {{ question_full_block(form.background4, form.background4_e, "background4_e") }}
+                {{ ckefields.append("background4_e") or '' }}
+                {{ rmd(t["sections"]["goals"]) }}
+
+                {% call render_info_block("FOR CODERS", "forcoders-ago") %}
+{{ "goals" | forcoders}}
+                {% endcall %}
+
+
+                {{ rmd(get_header("goals1")) }}
+                {{ question_full_block(form.goals1, form.goals1_e, "goals1_e") }}
+                {{ ckefields.append("goals1_e") or '' }}
+                {{ rmd(get_header("goals2")) }}
+                {{ question_full_block(form.goals2, form.goals2_e, "goals2_e") }}
+                {{ ckefields.append("goals2_e") or '' }}
+                {{ rmd(get_header("goals3")) }}
+                {{ question_full_block(form.goals3, form.goals3_e, "goals3_e") }}
+                {{ ckefields.append("goals3_e") or '' }}
+                
+                {{ rmd(t["sections"]["caution"])}}
+
+                {{ rmd(t["sections"]["conceptual"]) }}
+                {{ rmd(get_header("conceptual1")) }}
+                {{ question_full_block(form.conceptual1, form.conceptual1_e, "conceptual1_e") }}
+                {{ ckefields.append("conceptual1_e") or '' }}
+                {{ rmd(get_header("conceptual2")) }}
+                {{ question_full_block(form.conceptual2, form.conceptual2_e, "conceptual2_e") }}
+                {{ ckefields.append("conceptual2_e") or '' }}
+                {{ rmd(get_header("conceptual3")) }}
+                {{ question_full_block(form.conceptual3, form.conceptual3_e, "conceptual3_e") }}
+                {{ ckefields.append("conceptual3_e") or '' }}
+                {{ rmd(t["sections"]["recruitment"]) }}
+                {% call render_info_block("FOR CODERS", "forcoders-recr") %}
+{{ "recruitment" | forcoders}}
+                {% endcall %}
+
+                {{ rmd(get_header("recruitment1")) }}
+                {{ question_full_block(form.recruitment1, form.recruitment1_e, "recruitment1_e") }}
+                {{ ckefields.append("recruitment1_e") or '' }}
+                {{ rmd(get_header("recruitment1a")) }}
+                {{ question_full_block(form.recruitment1a, form.recruitment1a_e, "recruitment1a_e") }}
+                {{ ckefields.append("recruitment1a_e") or '' }}
+                {{ rmd(get_header("recruitment2")) }}
+                {{ question_full_block(form.recruitment2, form.recruitment2_e, "recruitment2_e") }}
+                {{ ckefields.append("recruitment2_e") or '' }}
+                {{ rmd(get_header("recruitment3")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-recr-dates") %}
+{{ "recruitment3" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.recruitment3, form.recruitment3_e, "recruitment3_e") }}
+                {{ ckefields.append("recruitment3_e") or '' }}
+                {{ rmd(t["sections"]["incentives"]) }}
+                {% call render_info_block("FOR CODERS", "forcoders-incent") %}
+{{ "incentives" | forcoders}}
+                {% endcall %}
+
+                {{ question_full_block(form.incentives, form.incentives_e, "incentives_e") }}
+                {{ ckefields.append("incentives_e") or '' }}
+                {{ rmd(get_header("participants")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-participants") %}
+{{ "participants" | forcoders}}
+                {% endcall %}
+
+                {{ rmd(get_header("participants1")) }}
+                {{ question_full_block(form.participants1, form.participants1_e, "participants1_e") }}
+                {{ ckefields.append("participants1_e") or '' }}
+
+                {{ rmd(get_header("participants2")) }}
+                {{ question_full_block(form.participants2, form.participants2_e, "participants2_e") }}
+                {{ ckefields.append("participants2_e") or '' }}
+
+                {{ rmd(get_header("participants3")) }}
+                {{ question_full_block(form.participants3, form.participants3_e, "participants3_e") }}
+                {{ ckefields.append("participants3_e") or '' }}
+
+                {{ rmd(get_header("participants4")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-education-partly") %}
+{{ "participants4" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.participants4, form.participants4_e, "participants4_e") }}
+                {{ ckefields.append("participants4_e") or '' }}
+
+                {{ rmd(get_header("participants5")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-topic-characteristics") %}
+{{ "participants5" | forcoders}}
+                {% endcall %}
+                {{ question_full_block(form.participants5, form.participants5_e, "participants5_e") }}
+                {{ ckefields.append("participants5_e") or '' }}
+
+                {{ rmd(get_header("exclusion")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-participants-exl") %}
+{{ "exclusion" | forcoders}}
+                {% endcall %}
+
+                {{ rmd(get_header("exclusion0")) }}
+                {{ question_full_block(form.exclusion0, form.exclusion0_e, "exclusion0_e") }}
+                {{ ckefields.append("exclusion0_e") or '' }}
+                {{ rmd(get_header("exclusion1")) }}
+                {{ question_full_block(form.exclusion1, form.exclusion1_e, "exclusion1_e") }}
+                {{ ckefields.append("exclusion1_e") or '' }}
+                {{ rmd(get_header("exclusion2")) }}
+                {{ question_full_block(form.exclusion2, form.exclusion2_e, "exclusion2_e") }}
+                {{ ckefields.append("exclusion2_e") or '' }}
+                {{ rmd(get_header("exclumeasure")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-participants-exl-m") %}
+{{ "exclumeasure" | forcoders}}
+                {% endcall %}
+
+                {{ rmd(get_header("exclumeasure1")) }}
+                {{ question_full_block(form.exclumeasure1, form.exclumeasure1_e, "exclumeasure1_e") }}
+                {{ ckefields.append("exclumeasure1_e") or '' }}
+                {{ rmd(get_header("exclumeasure2")) }}
+                {{ question_full_block(form.exclumeasure2, form.exclumeasure2_e, "exclumeasure2_e") }}
+                {{ ckefields.append("exclumeasure2_e") or '' }}
+                {{ rmd(get_header("exclumeasure3")) }}
+                {{ question_full_block(form.exclumeasure3, form.exclumeasure3_e, "exclumeasure3_e") }}
+                {{ ckefields.append("exclumeasure3_e") or '' }}
+                {{ rmd(get_header("kindofstudy"))}}
+                {% call render_info_block("FOR CODERS", "forcoders-kind") %}
+{{ "kindofstudy" | forcoders}}
+                {% endcall %}
+                {{ wtf.form_field(form.kindofstudy) }}
+
+                {{ rmd(get_header("statistical_analysis"))}}
+                {% call render_info_block("FOR CODERS", "forcoders-software") %}
+{{ "statistical_analysis" | forcoders}}
+
+                {% endcall %}
+                {{ question_full_block(form.statistical_analysis, form.statistical_analysis_e, "statistical_analysis_e") }}
+                {{ ckefields.append("statistical_analysis_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.methods_comment() }}
+                {{ ckefields.append("methods_comment") or '' }}                {% endif %}
+            </div>
+            <div class="tab-pane" id="methodsq">
+
+                {{ rmd(t["sections"]["methodsq"]) }}
+
+                {% call render_info_block("FOR CODERS", "forcoders-questionnaires-dictionary") %}
+{{ "dictionary" | forcoders}}
+                {% endcall %}
+
+
+                {{ rmd(get_header("qmeasure1")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-tools-desc") %}
+{{ "qmeasure1" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.qmeasure1, form.qmeasure1_e, "qmeasure1_e") }}
+                {{ ckefields.append("qmeasure1_e") or '' }}
+
+                {{ rmd(get_header("qmeasure2")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-tools2-desc") %}
+{{ "qmeasure2" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.qmeasure2, form.qmeasure2_e, "qmeasure2_e") }}
+                {{ ckefields.append("qmeasure2_e") or '' }}
+                {{ rmd(get_header("qmeasure3")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-stimuli-2") %}
+{{ "qmeasure3" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.qmeasure3, form.qmeasure3_e, "qmeasure3_e") }}
+                {{ ckefields.append("qmeasure3_e") or '' }}
+                {{ rmd(get_header("qmeasure4")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-stimuli-3") %}
+{{ "qmeasure4" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.qmeasure4, form.qmeasure4_e, "qmeasure4") }}
+                {{ ckefields.append("qmeasure4_e") or '' }}
+                {{ rmd(get_header("qmeasure5")) }}
+                {{ question_full_block(form.qmeasure5, form.qmeasure5_e, "qmeasure5_e") }}
+                {{ ckefields.append("qmeasure5_e") or '' }}
+                {{ rmd(get_header("qmeasure6")) }}
+                {{ rmd(get_header("qmeasure6a")) }}
+                {{ question_full_block(form.qmeasure6a, form.qmeasure6a_e, "qmeasure6a_e") }}
+                {{ ckefields.append("qmeasure6a_e") or '' }}
+                {{ rmd(get_header("qmeasure6b")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-order") %}
+{{ "qmeasure6b" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.qmeasure6b, form.qmeasure6b_e, "qmeasure6b_e") }}
+                {{ ckefields.append("qmeasure6b_e") or '' }}
+                {{ rmd(get_header("qmeasure6c")) }}
+                {{ question_full_block(form.qmeasure6c, form.qmeasure6c_e, "qmeasure6c_e") }}
+                {{ ckefields.append("qmeasure6c_e") or '' }}
+                {{ rmd(get_header("qmeasure6d")) }}
+                {{ question_full_block(form.qmeasure6d, form.qmeasure6d_e, "qmeasure6d_e") }}
+                {{ ckefields.append("qmeasure6d_e") or '' }}
+                {{ rmd(get_header("qmeasure6e")) }}
+                {{ question_full_block(form.qmeasure6e, form.qmeasure6e_e, "qmeasure6e_e") }}
+                {{ ckefields.append("qmeasure6e_e") or '' }}
+                {{ rmd(get_header("qmeasure6f")) }}
+                {{ question_full_block(form.qmeasure6f, form.qmeasure6f_e, "qmeasure6f_e") }}
+                {{ ckefields.append("qmeasure6f_e") or '' }}
+                {{ rmd(get_header("qmeasure7")) }}
+                {{ rmd(get_header("qmeasure7a")) }}
+                {{ question_full_block(form.qmeasure7a, form.qmeasure7a_e, "qmeasure7a_e") }}
+                {{ ckefields.append("qmeasure7a_e") or '' }}
+                {{ rmd(get_header("qmeasure7b")) }}
+                {{ question_full_block(form.qmeasure7b, form.qmeasure7b_e, "qmeasure7b_e") }}
+                {{ ckefields.append("qmeasure7b_e") or '' }}
+                {{ rmd(get_header("qmeasure7c")) }}
+                {{ question_full_block(form.qmeasure7c, form.qmeasure7c_e, "qmeasure7c_e") }}
+                {{ ckefields.append("qmeasure7c_e") or '' }}
+                {{ rmd(get_header("qmeasure7d")) }}
+                {{ question_full_block(form.qmeasure7d, form.qmeasure7d_e, "qmeasure7d_e") }}
+                {{ ckefields.append("qmeasure7d_e") or '' }}
+                {{ rmd(get_header("qmeasure8")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-instructions") %}
+{{ "qmeasure8" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.qmeasure8, form.qmeasure8_e, "qmeasure8_e") }}
+                {{ ckefields.append("qmeasure8_e") or '' }}
+                {{ rmd(get_header("qmeasure9")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-duration") %}
+{{ "qmeasure9" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.qmeasure9, form.qmeasure9_e, "qmeasure9_e") }}
+                {{ ckefields.append("qmeasure9_e") or '' }}
+
+                {{ rmd(get_header("qmeasure10")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-assignment") %}
+{{ "qmeasure10" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.qmeasure10, form.qmeasure10_e, "qmeasure10_e") }}
+                {{ ckefields.append("qmeasure10_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.methodsq_comment() }}
+                {{ ckefields.append("methodsq_comment") or '' }}                {% endif %}
+
+            </div>
+            <div class="tab-pane" id="methodsn">
+
+                {{ rmd(t["sections"]["methodosn"]) }}
+                {{ rmd(get_header("nqmeasure1")) }}
+                {{ question_full_block(form.nqmeasure1, form.nqmeasure1_e, "nqmeasure1_e") }}
+                {{ ckefields.append("nqmeasure1_e") or '' }}
+                {{ rmd(get_header("nqmeasure2")) }}
+                {{ question_full_block(form.nqmeasure2, form.nqmeasure2_e, "nqmeasure2_e") }}
+                {{ ckefields.append("nqmeasure2_e") or '' }}
+                {{ rmd(get_header("nqmeasure3")) }}
+                {{ question_full_block(form.nqmeasure3, form.nqmeasure3_e, "nqmeasure3_e") }}
+                {{ ckefields.append("nqmeasure3_e") or '' }}
+                {{ rmd(get_header("nqmeasure4")) }}
+                {{ question_full_block(form.nqmeasure4, form.nqmeasure4_e, "nqmeasure4_e") }}
+                {{ ckefields.append("nqmeasure4_e") or '' }}
+                {{ rmd(get_header("nqmeasure5")) }}
+                {{ question_full_block(form.nqmeasure5, form.nqmeasure5_e, "nqmeasure5_e") }}
+                {{ ckefields.append("nqmeasure5_e") or '' }}
+                {{ rmd(get_header("nqmeasure6")) }}
+
+                {% call render_info_block("FOR CODERS", "forcoders-stimuli") %}
+{{ "nqmeasure6" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.nqmeasure6, form.nqmeasure6_e, "nqmeasure6_e") }}
+                {{ ckefields.append("nqmeasure6_e") or '' }}
+                {{ rmd(get_header("nqmeasure7")) }}
+{{ "nqmeasure7" | forcoders }}
+                {% call render_info_block("FOR CODERS", "forcoders-stimuli-compl") %}
+                {% endcall %}
+
+                {{ question_full_block(form.nqmeasure7, form.nqmeasure7_e, "nqmeasure7_e") }}
+                {{ ckefields.append("nqmeasure7_e") or '' }}
+                {{ rmd(get_header("nqmeasure8")) }}
+                {{ question_full_block(form.nqmeasure8, form.nqmeasure8_e, "nqmeasure8_e") }}
+                {{ ckefields.append("nqmeasure8_e") or '' }}
+                {{ rmd(get_header("nqmeasure9")) }}
+                {{ question_full_block(form.nqmeasure9, form.nqmeasure9_e, "nqmeasure9_e") }}
+                {{ ckefields.append("nqmeasure9_e") or '' }}
+                {{ rmd(get_header("nqmeasure10")) }}
+                {{ question_full_block(form.nqmeasure10, form.nqmeasure10_e, "nqmeasure10_e") }}
+                {{ ckefields.append("nqmeasure10_e") or '' }}
+                {{ rmd(get_header("nqmeasure11")) }}
+                {{ rmd(get_header("nqmeasure11a")) }}
+                {{ question_full_block(form.nqmeasure11a, form.nqmeasure11a_e, "nqmeasure11a_e") }}
+                {{ ckefields.append("nqmeasure11a_e") or '' }}
+                {{ rmd(get_header("nqmeasure11b")) }}
+                {{ question_full_block(form.nqmeasure11b, form.nqmeasure11b_e, "nqmeasure11b_e") }}
+                {{ ckefields.append("nqmeasure11b_e") or '' }}
+                {{ rmd(get_header("nqmeasure11c")) }}
+                {{ question_full_block(form.nqmeasure11c, form.nqmeasure11c_e, "nqmeasure11c_e") }}
+                {{ ckefields.append("nqmeasure11c_e") or '' }}
+                {{ rmd(get_header("nqmeasure11d")) }}
+                {{ question_full_block(form.nqmeasure11d, form.nqmeasure11d_e, "nqmeasure11d_e") }}
+                {{ ckefields.append("nqmeasure11d_e") or '' }}
+                {{ rmd(get_header("nqmeasure11e")) }}
+                {{ question_full_block(form.nqmeasure11e, form.nqmeasure11e_e, "nqmeasure11e_e") }}
+                {{ ckefields.append("nqmeasure11e_e") or '' }}
+                {{ rmd(get_header("nqmeasure12")) }}
+                {{ question_full_block(form.nqmeasure12, form.nqmeasure12_e, "nqmeasure12_e") }}
+                {{ ckefields.append("nqmeasure12_e") or '' }}
+                {{ rmd(get_header("nqmeasure13")) }}
+                {{ question_full_block(form.nqmeasure13, form.nqmeasure13_e, "nqmeasure13_e") }}
+                {{ ckefields.append("nqmeasure13_e") or '' }}
+                {{ rmd(get_header("nqmeasure14")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-software-coll") %}
+{{ "nqmeasure14" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.nqmeasure14, form.nqmeasure14_e, "nqmeasure14_e") }}
+                {{ ckefields.append("nqmeasure14_e") or '' }}
+                {{ rmd(get_header("nqmeasure15")) }}
+                {{ question_full_block(form.nqmeasure15, form.nqmeasure15_e, "nqmeasure15_e") }}
+                {{ ckefields.append("nqmeasure15_e") or '' }}
+                {{ rmd(get_header("nqmeasure16")) }}
+                {{ question_full_block(form.nqmeasure16, form.nqmeasure16_e, "nqmeasure16_e") }}
+                {{ ckefields.append("nqmeasure16_e") or '' }}
+                {{ rmd(get_header("nqmeasure17")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-manip-check") %}
+{{ "nqmeasure17" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.nqmeasure17, form.nqmeasure17_e, "nqmeasure17_e") }}
+                {{ ckefields.append("nqmeasure17_e") or '' }}
+                {{ rmd(get_header("nqmeasure18")) }}
+                {{ question_full_block(form.nqmeasure18, form.nqmeasure18_e, "nqmeasure18_e") }}
+                {{ ckefields.append("nqmeasure18_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.methodsnq_comment() }}
+                {{ ckefields.append("methodsnq_comment") or '' }}                {% endif %}
+            </div>
+            <div class="tab-pane" id="results">
+                {{ rmd(t["sections"]["results"]) }}                
+                {{ rmd(t["sections"]["flow"]) }}
+                {{ rmd(get_header("flow1")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-flow") %}
+{{ "flow1" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.flow1, form.flow1_e, "flow1_e") }}
+                {{ ckefields.append("flow1_e") or '' }}
+
+                {{ rmd(get_header("flow2")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-flow2") %}
+{{ "flow2" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.flow2, form.flow2_e, "flow2_e") }}
+                {{ ckefields.append("flow2_e") or '' }}
+                {{ rmd(get_header("flow3")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-sample-size") %}
+{{ "flow3" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.flow3, form.flow3_e, "flow3_e") }}
+                {{ ckefields.append("flow3_e") or '' }}
+                {{ rmd(t["sections"]["descriptive"]) }}
+                {{ rmd(get_header("descriptive1")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-descriptive-stats") %}
+{{ "descriptive1" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.descriptive1, form.descriptive1_e, "descriptive1_e") }}
+                {{ ckefields.append("descriptive1_e") or '' }}
+                {{ rmd(get_header("descriptive2")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-confidence-intervals") %}
+{{ "descriptive2" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.descriptive2, form.descriptive2_e, "descriptive2_e") }}
+                {{ ckefields.append("descriptive2_e") or '' }}
+                {{ rmd(t["sections"]["inferential"]) }}
+                {{ rmd(get_header("inferential1")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-inferential-stats") %}
+{{ "inferential1" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.inferential1, form.inferential1_e, "inferential1_e") }}
+                {{ ckefields.append("inferential1_e") or '' }}
+                {{ rmd(get_header("inferential2")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-pvals") %}
+{{ "inferential2" | forcoders }}
+                {% endcall %}
+                {{ question_full_block(form.inferential2, form.inferential2_e, "inferential2_e") }}
+                {{ ckefields.append("inferential2_e") or '' }}                    
+                {{ rmd(get_header("inferential3")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-effect-sizes" ) %} 
+{{ "inferential3" | forcoders }}
+                {% endcall %} 
+                {{ question_full_block(form.inferential3, form.inferential3_e, "inferential3_e") }}
+                {{ ckefields.append("inferential3_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.results_comment() }}
+                {{ ckefields.append("results_comment") or '' }}                {% endif %}
+                </div>
+                <div class="tab-pane" id="conclusions">
+
+
+                {{ rmd(t["sections"]["conclusions"]) }}                        
+                {{ rmd(t["sections"]["interpretation"]) }}                        
+                {% call render_info_block("FOR CODERS", "forcoders-interpretation") %}
+{{ "interpretation" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.interpretation, form.interpretation_e, "interpretation_e") }}
+                {{ ckefields.append("interpretation_e") or '' }}
+                {{ rmd(get_header("validity")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-validity") %}
+{{ "validity" | forcoders }}
+                {% endcall %}
+
+                {{ question_full_block(form.validity, form.validity_e, "validity_e") }}
+                {{ ckefields.append("validity_e") or '' }}
+                {% if not printable %}
+                {{ rmd("#### Coder's comments") }}
+                {{ form.conclusions_comment() }}
+                {{ ckefields.append("conclusions_comment") or '' }}                {% endif %}
+                    </div>
+            </div>
+
+            {% if mode == "edit" %}
+            {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
+            {% endif %}
+    </form>
+
+    {% else %}
+    <p>
+        You are not signed in.
+    </p>
+
+    <p>
+    <ul>
+        <li>
+            <a href="{{ url_for('login') }}"> Sign in </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('register') }}"> Create a new account </a>
+        </li>
+    </ul>
+    </p>
+</div>
+{% endif %}
+
+
+{{ ckeditor.load() }}
+{% for field in ckefields[:1]  %}
+{{ ckeditor.config(name=field) }}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,102 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% macro rmd(text) -%}
+{% markdown %}
+{{ text }}
+{% endmarkdown %}
+{%- endmacro %}
+
+{% macro render_info_block(title, id) -%}
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <strong class="panel-title">
+            <a role="button" data-toggle="collapse" href="#{{ id }}">
+                {{ title }}
+            </a>
+        </strong>
+    </div>
+    <div class="panel-body collapse" id="{{ id }}">
+        {% set content=caller() %}
+        {% markdown %}
+        {{ content }}
+        {% endmarkdown %}
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro question_block() -%}
+<div class="question">
+        {{ caller() }}
+</div>
+{%- endmacro %}
+
+{% macro question_container_block() -%}
+<div class="question-container">
+        {{ caller() }}
+</div>
+{%- endmacro %}
+
+
+{% macro modal_block(title, id, text) -%}
+<div class="evidence-block">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ id }}">
+    {{ title }}
+</button>
+
+<p id="{{ id }}-short">
+{{ text | striptags | truncate(100) }}
+<script>
+    window.addEventListener('load', function(){
+        CKEDITOR.instances['{{ id }}'].on('instanceReady', function() {
+            var editor = CKEDITOR.instances['{{ id }}'] ;
+            var editorContent = editor.getData();
+            var plainText = editorContent.replace(/<[^>]*>?/gm, '');  // Regex to remove HTML tags
+            var truncatedText = plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
+
+            document.getElementById('{{ id }}-short').innerHTML = truncatedText ;
+        });
+        CKEDITOR.instances['{{ id }}'].on('change', function() {
+            var editor = CKEDITOR.instances['{{ id }}'] ;
+            var editorContent = editor.getData();
+            var plainText = editorContent.replace(/<[^>]*>?/gm, '');  // Regex to remove HTML tags
+            var truncatedText = plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
+            document.getElementById('{{ id }}-short').innerHTML = truncatedText ;
+        }) ;
+    })
+</script>
+</p>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xxl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            {{ caller() }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro question_full_block(form_field, form_field_e, form_field_e_id) -%}
+                {% call question_container_block() %}
+                {% call question_block() %}
+                {{ wtf.form_field(form_field) }}
+                {% endcall %}
+                {% call modal_block("Evidence", form_field_e_id, form_field_e.data) %} 
+                {{ wtf.form_field(form_field_e)}}
+                {% endcall %}
+                {% endcall %}
+{%- endmacro %}

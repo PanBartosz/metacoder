@@ -1,0 +1,76 @@
+<!doctype html>
+{% extends "bootstrap/base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+{% block head %}
+{{ super() }}
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% endblock %}
+
+{% block scripts %}
+{{super() }}
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+        let table = new DataTable('#article-list');
+});
+    </script>
+
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h1>
+        <img src={{ url_for('static', filename="logo-meta_new.png" ) }} style="max-width: 120px; display: inline-block">
+        <span class = "site-title"> X-PHI Transparency & Quality of Reporting Inventory</span>
+    </h1>
+    <a href="{{ url_for('index') }}">
+        <button type="button" class="btn btn-primary">
+            Go back
+        </button>
+    </a>
+
+    {% if current_user.is_authenticated %}
+    <h3 style="color: red;"> Are you sure that you want to delete the following article:</h3>
+
+    <h3>ID: {{ form.id.data }} </h3>
+    <h3>Shortname: {{ form.short.data }}</h3>
+
+    <form class="form" method="post" role="form" action="{{ url_for('delete') }}">
+        {{ form.hidden_tag() }}
+    <h3 style="color: red;"> this is so, please write "YES" in the text field below:</h3>
+    {{ wtf.form_field(form.id) }}
+    {{ wtf.form_field(form.confirm) }}
+        {{ wtf.form_field(form.delete, button_map={"delete": "danger"}) }}
+    </form>
+
+
+    {% else %}
+
+    <p>
+        You are not signed in.
+    </p>
+
+    <p>
+    <ul>
+        <li>
+            <a href="{{ url_for('login') }}"> Sign in </a>
+        </li>
+
+        <li>
+            <a href="{{ url_for('register') }}"> Create a new account </a>
+        </li>
+    </ul>
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}
