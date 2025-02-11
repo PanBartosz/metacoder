@@ -28,3 +28,11 @@ User.query.all()[0].role = "admin" # set admin permissions
 db.session.delete(User.query.all()[0]) # delete an user
 db.session.commit()
 ```
+
+## Scoring system 
+
+Scores are stored in `translations.yaml` file. You can inspect all sections with scores using `utils/inspect_scoring.py` utility.
+
+```bash
+python inspect_scoring.py
+```
