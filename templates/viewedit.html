@@ -308,10 +308,6 @@
                 {{ question_full_block(form.conceptual3, form.conceptual3_e, "conceptual3_e") }}
                 {{ ckefields.append("conceptual3_e") or '' }}
                 {{ rmd(t["sections"]["recruitment"]) }}
-                {% call render_info_block("FOR CODERS", "forcoders-recr") %}
-{{ "recruitment" | forcoders}}
-                {% endcall %}
-
                 {{ rmd(get_header("recruitment1")) }}
                 {{ question_full_block(form.recruitment1, form.recruitment1_e, "recruitment1_e") }}
                 {{ ckefields.append("recruitment1_e") or '' }}

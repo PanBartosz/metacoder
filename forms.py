@@ -13,7 +13,7 @@ with open(BASE_PATH + "/translations.yaml", "r") as f:
     t = yaml.safe_load(f)
 
 def get_choices(question):
-    return t["q"][question]["choices"]
+    return [choice[0:2] for choice in t["q"][question]["choices"]]
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -219,8 +219,8 @@ class ArticleForm(FlaskForm):
     qmeasure4_e = CKEditorField("qmeasure4_e")
     qmeasure5 = RadioField("qmeasure5", choices=get_choices("qmeasure5"))
     qmeasure5_e = CKEditorField("qmeasure5_e")
-    qmeasure6 = RadioField("qmeasure6", choices=get_choices("qmeasure6"))
-    qmeasure6_e = CKEditorField("qmeasure6_e")
+    #qmeasure6 = RadioField("qmeasure6", choices=get_choices("qmeasure6"))
+    #qmeasure6_e = CKEditorField("qmeasure6_e")
     qmeasure6a = RadioField("qmeasure6a", choices=get_choices("qmeasure6a"))
     qmeasure6a_e = CKEditorField("qmeasure6a_e")
     qmeasure6b = RadioField("qmeasure6b", choices=get_choices("qmeasure6b"))

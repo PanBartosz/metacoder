@@ -14,3 +14,17 @@ You can run it locally using `conda` (https://docs.anaconda.com/miniconda/instal
   - set `BASE_PATH` environmental variable to the directory containing the app and `FLASK_APP` to `__init__.py` 
   - run `flask shell` and `db.create_all()` inside the shell to create an empty database
   - run `flask run` in the app directory
+
+## Administration
+
+Run a flask shell:
+
+```bash
+FLASK_APP=__init__.py flask shell
+```
+
+```python
+User.query.all()[0].role = "admin" # set admin permissions
+db.session.delete(User.query.all()[0]) # delete an user
+db.session.commit()
+```

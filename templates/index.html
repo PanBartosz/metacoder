@@ -138,6 +138,7 @@
         <tbody class="searchable">
 
             {% for article in available_articles %}
+            {% if current_user.can_edit(article.id) %}
             <tr>
                 <td></td>
                 <td> {{ article.id }} </td>
@@ -175,6 +176,7 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
