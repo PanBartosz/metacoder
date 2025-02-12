@@ -34,5 +34,5 @@ db.session.commit()
 Scores are stored in `XPHITQRI.yaml` file. You can inspect all sections with scores using `utils/inspect_scoring.py` utility.
 
 ```bash
-python inspect_scoring.py
+python inspect_scoring.py -p XPHITQRI.yaml
 ```
