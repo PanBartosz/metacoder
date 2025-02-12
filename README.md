@@ -4,7 +4,7 @@ This is the web app designed to facilitate coding experimental philosophy papers
 
 ## (Methodologically) Important files
 
-In the `translations.yaml` file you can find **ALL** items in the inventory as well as coding instructions and additional elements. 
+In the `XPHITQRI.yaml` file you can find **ALL** items in the inventory as well as coding instructions and additional elements. 
 
 ## Running it locally
 
@@ -31,7 +31,7 @@ db.session.commit()
 
 ## Scoring system 
 
-Scores are stored in `translations.yaml` file. You can inspect all sections with scores using `utils/inspect_scoring.py` utility.
+Scores are stored in `XPHITQRI.yaml` file. You can inspect all sections with scores using `utils/inspect_scoring.py` utility.
 
 ```bash
 python inspect_scoring.py

@@ -9,7 +9,7 @@ from .models import User
 import yaml
 
 BASE_PATH = os.getenv('BASE_PATH')
-with open(BASE_PATH + "/translations.yaml", "r") as f:
+with open(BASE_PATH + "/XPHITQRI.yaml", "r") as f:
     t = yaml.safe_load(f)
 
 def get_choices(question):

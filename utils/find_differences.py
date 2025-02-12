@@ -2,7 +2,7 @@ import argparse
 import pandas as pd
 import yaml
 
-with open("../translations.yaml", "r") as f:
+with open("../XPHITQRI.yaml", "r") as f:
     t = yaml.safe_load(f)
 
 
