@@ -1,0 +1,850 @@
+nav:
+  general: "General"
+  methods: "Methods"
+  methodsn : Methods (non-questionnaire)
+  methodsq: Methods (questionnaire)
+  results: "Results"
+  conclusions: "Conclusions"
+  validate: "Validate"
+  transparency: "Transparency"
+sections:
+ transparency: "## Transparency"
+ open_access: "### A. Open access"
+ preregistration: "### B. Pre-registration"
+ availability: "### C. Availability of artefacts and data"
+ availability_text: "Artefact (i.e., materials/analysis code) and data availability statements are often found in the “Supplementary materials”, “Acknowledgements”, “Author notes”, “Methods” or “Results” sections. Search the text for the phrase “data available”, check whether any reference to a webpage (“www”, “https”, “http”) leads to a page with the artefacts/data. Do not forget to look at the article page on the publisher’s website, which might have a special section for that purpose."
+ methods: "## Methods"
+ theoretical_background: "### A. Theoretical background"
+ goals: "### B. Aims/goals/objectives of the studies"
+ conceptual : "### C. Conceptual variables and their measures"
+ recruitment : "### D. Recruitment procedure"
+ incentives : "#### E. Incentives for participation"
+ methodsq: "## Methods (questionnaire)"
+ results : "## Results"
+ flow : "### A. Participant flow"
+ descriptive: "### B. Descriptive statistics of results"
+ inferential: "### C. Inferential statistics"
+ conclusions: "## Conclusions"
+ interpretation: "### A. Interpretation of results"
+ methodsn: "## Methods (non-questionnaire)"
+ caution: "#### **Caution.** From this section you are asked to only consider one selected study (first non-pilot study described in the paper). Please note that some information required to answer the first question (*1. Have any theoretical...*) might be contained in the introductory part of the article."
+
+parts:
+  - part:
+    name: "TRANSPARENCY"
+    questions:
+      - open_access 
+      - preregistration
+      - statement_of_availability
+      - materials_availability
+      - data_availability
+      - code_availability
+  - part:
+    name: "THEORETICAL BACKGROUND"
+    questions:
+      - background1
+      - background2
+      - background3
+      - background4
+      - goals1 
+      - goals2 
+      - goals3 
+      - conceptual1 
+      - conceptual2 
+      - conceptual3 
+  - part:
+    name: "METHODS (GENERAL)"
+    questions:
+      - recruitment1
+      - recruitment2
+      - recruitment3
+      - incentives 
+      - participants1 
+      - participants2 
+      - participants3 
+      - participants4 
+      - participants5 
+      - exclusion0 
+      - exclusion1 
+      - exclusion2
+      - exclumeasure1
+      - exclumeasure2
+      - exclumeasure3
+      - statistical_analysis
+  - part:
+    name: "METHODS (QUESTIONNAIRE)"
+    questions:
+      - qmeasure1 
+      - qmeasure2 
+      - qmeasure3 
+      - qmeasure4 
+      - qmeasure5 
+      - qmeasure6a 
+      - qmeasure6b 
+      - qmeasure6c 
+      - qmeasure6d 
+      - qmeasure6e 
+      - qmeasure6f 
+      - qmeasure7a 
+      - qmeasure7b 
+      - qmeasure7c 
+      - qmeasure7d 
+      - qmeasure8 
+      - qmeasure9 
+  - part:
+    name: "METHODS (NON-QUESTIONNAIRE)"
+    questions:
+      - nqmeasure1 
+      - nqmeasure2 
+      - nqmeasure3 
+      - nqmeasure4 
+      - nqmeasure5 
+      - nqmeasure6 
+      - nqmeasure7 
+      - nqmeasure8 
+      - nqmeasure9 
+      - nqmeasure10 
+      - nqmeasure11 
+      - nqmeasure11a
+      - nqmeasure11b 
+      - nqmeasure11c 
+      - nqmeasure11d 
+      - nqmeasure11e
+      - nqmeasure12
+      - nqmeasure13
+      - nqmeasure14 
+      - nqmeasure15
+      - nqmeasure16 
+      - nqmeasure17 
+      - nqmeasure18 
+  - part:
+    name: "RESULTS"
+    questions:
+      - flow1
+      - flow2
+      - flow3
+      - descriptive1 
+      - descriptive2
+      - inferential1 
+      - inferential2
+      - inferential3 
+  - part:
+    name: "CONCLUSIONS"
+    questions:
+      - interpretation 
+      - validity
+q:
+  id:
+    head: "ID number of the paper: "
+  short:
+    head: "ID (BIBTEXKEY in the spreadsheet) of the paper"
+    text: "Remember that you are asked to assess only the first main (non-pilot) study in the paper. Please have in mind that we are interested in experimental or empirical studies on human subject. For example, if the paper presents a corpus study first and subsequently an experimental study on human subjects, take the latter as a study to assess."
+  online-first:
+    head: "Online-First Publication Date"
+    text: "If the article was published online-first before its inclusion in a numbered volume of the journal, what is its original publication date?"
+    forcoders: |
+      Often, when an article is published in an academic journal, it is initially released electronically as an *online-first* article (also referred to as a *preview* or a similar term). After several months or even years it may be published in a numbered volume of the journal. Unfortunately, academic databases often update the publication date to reflect the later, numbered-volume publication. Here, we are interested in the original publication date, which is typically the online-first publication date. Please note that we are only concerned with official publications, not preprints or other unofficial types of publication.
+
+      **Coder Instructions**:
+
+      If the article was published as an online-first paper, you can find this information:
+
+      - On the first page of the paper (look for phrases such as "published first," etc.)
+      - On the publisher’s webpage
+  n_studies:
+    head: "Number of studies"
+    text: How many original studies (overall, excluding pilot studies) were described in the paper?
+    forcoders: |
+      Please note that we are interested in the number of original, i.e., previously unpublished, experimental studies described in the paper. Previously published studies do not count here, even if they were done by the authors of the paper we are evaluating.
+
+      **Coder instructions**: 
+                
+      Occasionally the paper starts with a description of previously published studies. Those are considered non-original and do not count them. 
+                
+      Pilot study is often described as a pilot study, although sporadically it can also be called “preliminary study”, “informal survey”, or similarly. 
+  first_study:
+    head: First study
+    text: 'You will be tasked with assessing only the first main study described in the paper. Please specify where and how this study is presented. For example, you might note: “Experiment 1”, “Study 3,” or “The study described starting on page 5.” If the paper includes only one study, please note this explicitly.'
+  open_access:
+    head: A. Open Access
+    choices:
+      - ["Y", "a. The paper is available free of charge", 1]
+      - ["N", "b. The paper is behind a paywall", 0]
+      - ["P", "c. The paper is behind a paywall but a pre-print/author version is available.", 0.5]
+    forcoders: |
+      **Definitions**: A paper is available free of charge if and only if it is officially made available for free by the publisher.
+
+      **Coder instructions**: Preprints are typically uploaded to a repository such as ResearchGate, Academia.edu, arXiv, etc. Because the papers are frequently available via your research institution licence that is applied automatically, check whether the paper is open access by switching to *incognito mode* in your web browser.
+  preregistration:
+    head: "B. Pre-registration"
+    choices: 
+      - ["N", "a. Studies in the paper were not pre-registered.", 0]
+      - ["P", "b. Studies in the paper were pre-registered but pre-registration lacks important details or there is an undocumented discrepancy between pre-registration and actual study.", 1]
+      - ["Y", "c. Studies in the paper were pre-registered and they were conducted and analyzed in accordance with pre-registration.", 2]
+    forcoders: |
+      **Definitions**: A study is pre-registered when a specification of important aspects of the study was posted to a public registry prior to data collection.
+
+      **Coder instructions**:
+
+      - For item a, check supplementary materials, appendices, author notes, methods and results sections for words “registration” or “registered”.
+      - For item b, check whether the study was pre-registered: check the availability of specification at the indicated platform.
+      - For item c, if the specification is available: check whether the study was conducted in line with the study design and analysis plan described in the specification. You may have to read the whole description of the study in the article first to answer this question. You can come back to it after you have assessed other aspects of the study. Select c. if the study was conducted in accordance with the specification.
+  statement_of_availability:
+    head: "#### 1. Statement of availability"
+    choices:
+      - ["N", "a. The paper/article or the article page on the publisher’s website contains no statement of availability.", 0]
+      - ["P", "b. The paper/article or the article page on the publisher’s website contains a statement of availability for some but not all kinds of data and artefacts applicable.", 0.5]
+      - ["Y", "c. The paper/article or the article page on the publisher’s website contains a statement of availability for data and all kinds of artefacts applicable.", 1]
+    forcoders: |
+      **Definitions**: _Statement of artefact/data availability_ – any indication that some/all artefacts have been made available on line. In can be as simple as a link in a footnote or as complex as a full sentence, such as “All study materials, data and analysis scripts are available at …”.
+
+      **Coder instructions**: For this question, you need to consider three types of artefacts: materials, code, and data. For code, please note that in some cases, sharing is not required (see the "For Coders" section for question 4). If any category of artefact is missing from the availability statement, select b.
+      
+      An explanation as to why it was impossible, in a given instance, to share artefacts/data also counts as an artefact/data availability statement. In such a case, select b.
+  materials_availability:
+    head: "#### 2. Materials availability"
+    choices:
+      - ["N", "a. No materials are available.", 0]
+      - ["P", "b. Some but not all materials are available.", 1]
+      - ["Y", "c. All materials are available.", 1.5]
+      - ["F", "d. All materials available in the exact form that was used in the study.", 2]
+    forcoders: |
+      **Definitions**: Materials – any items necessary to recreate the study, such as stimuli, survey instruments, and computer code/software used for data collection and stimuli presentation. Stimuli – in x-phi, the most frequently used stimuli are written vignettes but other forms are also possible (images, video/audio recordings, etc.).
+
+      **Coder instructions**: Check the paper for materials/stimuli availability. For simple studies, it is possible that all stimuli are included in the main text of the paper. For more complex studies, check authors’ notes (endnotes/footnotes) for a link as well as Appendices to the paper and Supplementary materials on the publisher’s website. If some but not all materials (stimuli) are available, select b. If there is a full list of stimuli (not only examples of used stimuli or, e.g., only a subset of used vignettes), select c.  If all the materials are available in a ready-to-use format (e.g. entire survey is available to download as a PDF or a LimeSurvey/Qualtrics file, or script used to run experiment is downloadable) select d. 
+
+      **Important note:** In some cases, materials such as vignettes and survey questions may not be available as separate files but may be embedded in a data file as column headers, etc., and can be recovered with some effort. Carefully examine supplementary materials and data files, if available.
+
+  data_availability:
+    head: "#### 3. Data availability"
+    choices:
+      - ["N", "a. No data available.", 0]
+      - ["P", "b. Some data available.", 1]
+      - ["Y", "c. All data available.", 2]
+      - ["NA", "d. Not applicable.", -1]
+    forcoders: |
+      **Definitions**: Data – recorded information that the authors take to confirm the conclusions of the paper. We use “data” to refer to so-called raw data – i.e., recorded information in its rawest digital form, at the level of sampling units, usually participants.
+
+      **Coder instructions**: Select d.:
+
+      - If data is fully described in the paper (e.g., only two categorical variables, frequencies for each cell are fully described and no additional data [demographics etc.] was collected)
+      - If the paper contains specific reasons for not sharing the data (privacy, organizational constraints, etc.)
+  code_availability:
+    head: "#### 4. Analysis code availability"
+    choices:
+      - ["N", "a. Code/script is not available.", 0]
+      - ["Y", "b. Code/script is available.", 2]
+      - ["NA", "c. Not applicable.", -1]
+    forcoders: |
+      **Definitions**: Analysis code – any form of computer code/software instruction used to analyze the data. Most common examples: R or Python scripts, SPSS syntax files, Stata scripts. A detailed step-by-step description of analysis in point-and-click statistical software also counts.
+
+      **Coder instructions**
+
+      - Check the article for code availability. Search the article for phrases such as: “osf.io”, “github”, “figshare” (most popular platforms for sharing code and data) and the text “code availab”. Check the publisher’s website for the data and analysis code in supplementary materials to the article.
+
+      - Select d. if all statistical techniques used to analyze data are included in the following list: chi-square test, fisher exact test, binomial test, t test, computing measures of central tendency and dispersion. Note that Analysis of Variance (ANOVA) is not on the list.
+  theoretical_background:
+    forcoders: |
+      **Definitions**: A research problem is an issue, question or gap in our knowledge that the authors address in their study. It should be formulated (a) within some broader theoretical framework and (b) against a background of previous research in a way that makes it clear why the problem merits investigation.
+
+      **Coder instructions**: All this information should be somewhere near the beginning of the paper, typically in the abstract and introduction.
+
+      - For question 1, look for a statement of the research problem (often in the form of a question).
+      - For question 2, look for a characterization of a theory or theories (accounts).
+      - For question 3, check whether there is a summary of existing body of knowledge on the subject (so-called state of the art).
+      - For question 4, answer “yes” if and only if you think the authors have succeeded in showing the link between the research problem and previous theoretical and empirical work on the subject.
+  background1:
+    head: "#### 1. Does the paper contain a description of the research problem?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  background2:
+    head: "#### 2. Does the paper contain a description of a theory or theoretical dispute that makes the research problem significant?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  background3:
+    head: "#### 3. Does the paper discuss state of the art (provide a description of previous scholarship on the topic)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  background4:
+    head: "#### 4. Does the paper provide a clear rationale for the research problem in terms of a broader theory or previous empirical research?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  goals:
+    forcoders: |
+      **Definitions**: For the purposes of this study, a hypothesis is defined as a statement formulated in terms of conceptual variables (theoretical constructs/posits) and relevant to the research problem, whereas a prediction is a statement couched in terms of observable variables that is taken to either confirm (support) or disconfirm a hypothesis. E.g., if the research problem is whether or not being rich makes people happy then statements such as “Being rich makes people very happy” and “Being rich makes people miserable” are hypotheses because they are possible answers to the research problem and are formulated in terms of such conceptual variables as “being rich”, “happy” and “miserable”. Predictions, by contrast, would be formulated in terms of observed results in specific (experimental) conditions – e.g., “Participants with a yearly income of X will have significantly higher scores on test T than participants with a yearly income of Y”. In other words, predictions are operationalized hypotheses.
+
+      The primary aim of exploratory research is to better understand the research problem or find interesting patterns in the data. Exploratory research can suggest hypotheses but it should not be treated as providing evidence in support of any theory or hypothesis.
+
+      **Coder instructions**: Search the article for phrases such as “predictions”, “predict”, “expect”. Predictions can be included in a separate section (rare), listed in a table or list (more common) or “weaved” into study description in the first section. Look for clear statements such as “we predict that...” or “according to theory X participants should...”.
+
+      For question 2: If authors make it clear that the study is exploratory rather than confirmatory then select “not applicable”
+  goals1:
+    head: "#### 1. Does the paper contain a statement of what the studies are expected to accomplish (aims, goals, objectives)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  goals2:
+    head: "#### 2. Are any goals, aims or objectives expressed in terms of a hypothesis/prediction?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  goals3:
+    head: "#### 3. Does the paper make it clear how the studies differ from previous scholarship?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  conceptual1:
+    head: "#### 1. Have any theoretical concepts been defined (characterized in terms of other theoretical constructs)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  conceptual2:
+    head: "#### 2. Have all key theoretical concepts invoked in the hypotheses/predictions been defined (characterized in terms of other theoretical constructs)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  conceptual3:
+    head: "#### 3. Have all conceptual variables in the selected study been linked to actual measures (observable variables)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  recruitment1:
+    head: "#### 1. General method of recruitment was described (research panel, crowdsourcing platform [which?], announcement for students [program, year, etc.])."
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["P", "b. partly", 0.5]
+      - ["N", "c. no", 0]
+  recruitment1a:
+    head: "#### 1a. What is missing?" 
+  recruitment2:
+    head: "#### 2. Prescreening criteria are adequately described (location, language, education, SES, etc.)."
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  recruitment3:
+    head: "#### 3. Specific dates when recruitment was conducted were provided."
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: | 
+      If data files are available, recruitment dates may sometimes be found in a column labeled `date`, `completion_date`, or a similar variable.
+  incentives:
+    head: "### E. Incentives for participation"
+    forcoders: |
+      **Coder instructions**: Specifics such as exact amounts are not necessary. General description (e.g., “small financial compensation”) is sufficient. Search the article for keywords such as “compensat(ed|ion)”, “pay|pai”, “incentive(s)”, “credits” (like course credits) or currency symbols or abbreviations (“$”, “USD”). Information about platform/panel used to run the study (e.g., mTurk, which is paid) is sufficient to select b.
+    choices:
+      - ["N", "a. No description of incentives is provided.", 0]
+      - ["Y", "b. Incentives for participation or lack thereof are clearly described.", 1]
+  participants:
+    head: "### F. Description of participants"
+    forcoders: |
+      **Coder instructions**: Information crucial for assessing the paper in this category can be scattered throughout the entire text. If the information cannot be found in a separate “Participants” section, check whether this information can be inferred from other sections, in particular “Results”.
+  participants1:
+    head: "#### 1. Age (mean, median, standard deviation, range)"
+    choices:
+      - ["N", "a. No description.", 0]
+      - ["O", "b. Only a measure of central tendency (mean, median, etc.)", 0.5]
+      - ["P", "b. At least one measure of central tendency (mean, median, etc.) and at least one measure of dispersion (standard deviation, variance, range, etc.).", 0.75]
+      - ["Y", "c. At least two measures of central tendency (mean, median, etc.) and at least two measures of dispersion (standard deviation, variance, range, etc.)", 1]
+  participants2:
+    head: "#### 2. Gender"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  participants3:
+    head: "#### 3. Ethnicity/cultural background/first language (depending on the context of the study)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  participants4:
+    head: "#### 4. Education"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["P", "b. partly", 0.5]
+      - ["N", "c. no", 0]
+    forcoders: |
+      If the description of the method of recruitment makes it clear that the university students participated in the study and no other information is provided, select b.
+  participants5:
+    head: "#### 5. Important topic-specific characteristics (e.g., if the study concerns intuitions of philosophers, then distribution of specializations should be described, etc.)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      If the study aim was to investigate intuitions of non-philosophers and no data on philosophical education of the participants is provided, then select b.
+  exclusion:
+    head: "### G. Participants exclusion criteria post-hoc"
+    forcoders: |
+      If there is no indication, in the paper, that some participants were excluded from analysis then select “c. not applicable”. However, select “b. no” if the number of study participants is greater than the number of participants assigned to all groups (this indicates exclusion).
+
+  exclusion0:
+    head: "#### 1. Is it clearly stated whether there were any exclusions post-hoc in the study?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  exclusion1:
+    head: "#### 2. If participants were excluded from analysis, does the paper specify general exclusion criteria employed?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  exclusion2:
+    head: "#### 3. Does the paper justify (explicitly or implicitly) employing a specific exclusion criterion?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  exclumeasure:
+    head: "### H. Measures of participants post data-collection exclusion criteria"
+    forcoders: |
+      **Definitions:**
+
+      Measures (operationalizations) of _exclusion criteria_ are simply ways of finding out whether a participant satisfies the criterion. E.g., asking the participant “Are you a native speaker of language L?” is a measure of the variable being a (non)native speaker. Another measure of the same exclusion criterion would involve making the participant pronounce a word or phrase that is regarded as impossible to say correctly by a non-native speaker. Search for exact formulation of the questions or task used to measure whether participants meet the exclusion criteria.
+  exclumeasure1:
+    head: "#### 1. If some of the participants were rejected because they did not meet the demographic criteria, were these criteria presented (e.g., nonnatives, extensive philosophical education)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  exclumeasure2:
+    head: "#### 2. If attention and/or manipulation check was used, was it sufficiently described (exact formulation of the question that was used and its place in the set of stimuli given to participants, etc.)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  exclumeasure3:
+    head: "#### 3. If used, were time-related constraints (minimum possible comprehension and response time) sufficiently described?"
+    choices:
+      - ["Y", "a. yes", 0]
+      - ["N", "b. no", 1]
+      - ["NA", "c. not applicable", -1]
+  kindofstudy:
+    head: "### I. Kind of study:" 
+    choices:
+      - ["Q", "a. questionnaire"]
+      - ["N", "b. non-questionnaire"]
+      - ["M", "c. mixed"]
+    forcoders: |
+      **Definitions**: For our purposes, questionnaire studies are studies whose only kind of collected data are answers to a series of written questions. Mixed studies are studies that collect answers to a questionnaire as well as other kinds of data. Non-questionnaire studies are studies that do not rely on questionnaires.
+
+      **Coder instructions**: for mixed studies, complete both surveys: the “questionnaire studies” survey for the questionnaire part of the study and the “non-questionnaire studies” survey for other measures used in the study.
+  statistical_analysis:
+    head: "### J. Method of statistical analysis (computation by hand/specific program)"
+    choices:
+      - ["N", "a. Not available", 0]
+      - ["Y", "b. Available", 1]
+      - ["NA", "c. Not applicable", -1]
+    forcoders: |
+      **Coder instructions**: Search for names of specific programs such as “SPSS”, “Stata”, “R”, “Python” etc.
+
+      Select c, if all statistical techniques used to analyze data are included in the following list: chi-square test, fisher exact test, binomial test, t test, computing measures of central tendency and dispersion. Note that Analysis of Variance (ANOVA) is not on the list.
+  dictionary:
+    forcoders: |
+      **Definitions**
+
+      - **Stimuli**: In experimental philosophy, stimuli refer to the materials or inputs (e.g., vigniettes, sentences, statements, pictures, audio or video recordings, etc.) presented to participants to evoke responses or reactions.
+      - **Probes**: Probes are questions or prompts used to gather insights into participants' evaluation of the stimuli. For example, questions asked after presenting vigniettes should be considered probes.
+      - **Vignettes**: Vignettes are short, descriptive scenarios, often depicting some situation in a narrative manner. 
+      - **Nominal Scale**: A nominal scale is a type of measurement where categories are assigned as labels without any inherent order or ranking (e.g., "yes" vs. "no,", "true" vs "false") without implying any hierarchy.
+      - **Likert Scale**: The Likert scale is a rating scale where participants express their level of agreement or disagreement with statements, typically ranging from "strongly disagree" to "strongly agree." Similar numerical scales (e.g. ranging from "morally wrong" to "morally right") should also be considered Likert-type scales for coding purposes.
+      - **Scale Anchors**: Scale anchors are specific points on a scale that define the extremes or central points, giving meaning to the scale. For instance, in a Likert scale, anchors might include "strongly disagree" and "strongly agree".
+  qmeasure1:
+    head: "#### 1. Description of tools used to display stimuli (paper/online survey software/tools/platforms - LimeSurvey, PsychoPy, Qualtrics, etc.)" 
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions**: If the study was conducted on a sample of students (e.g. “philosophy class students”) and the paper does not specify how they completed the survey, select b., even though “paper” is a reasonable guess.
+  qmeasure2:
+    head: "#### 2. Description of implements/equipment used for collecting answers (pen, pencil, mouse, keyboard, special controllers, touchscreen)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      **Coder instructions**: If the survey was an on-line survey, then select “c. not applicable”.
+  qmeasure3:
+    head: "#### 3. Description of the construction of materials / stimuli"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions** 
+                
+      Check if you can answer the following questions after reading the stimulus discussion in the "Materials" section. If you can confidently answer more than three questions in the affirmative, answer “yes”.
+
+      - Is it clear why the stimuli look this way and not differently?
+      - Is the procedure according to which the stimuli were generated/constructed given?
+      - Would you know how to prepare additional stimuli?
+      - Is it clear which differences between the different stimuli are important and which are not?
+  qmeasure4:
+    head: "#### 4. Does the paper report the exact formulation of the probes used in the study (not in reported speech)?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      If a data file, project repository, or additional supplementary materials are available, take into account the information included there when answering questions 4–10. For example, sometimes the exact formulation of the probes used in the study is not included in the paper itself but is available in a repository or embedded in data files as headers.
+  qmeasure5:
+    head: "#### 5. Completeness of stimuli description"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  qmeasure6:
+    head: "#### 6. Presentation of the stimuli"
+  qmeasure6a:
+    head: "##### 6a. Is it specified whether stimuli (vignettes) were presented together with the probes (questions) or separately?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  qmeasure6b:
+    head: "##### 6b. Is it specified in what order stimuli (vignettes) and probes (questions) were presented (or how this was randomized)?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      **Coder instructions**: If it is clear that each study condition consists of only one vignette and one probe, then select “c. not applicable”.
+  qmeasure6c:
+    head: "##### 6c. Is it specified how many probes were presented simultaneously (on one page/screen)?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure6d:
+    head: "##### 6d. Is it clear whether participants were able to go back to previous vignettes or questions?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  qmeasure6e:
+    head: "##### 6e. Is it clear if all the questions in the questionnaire were mandatory and, if not, which ones were and which were not?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  qmeasure6f:
+    head: "##### 6f. Are technical measures taken to elicit specific behaviors from participants (time delay between questions etc.) adequately described?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure7:
+    head: "#### 7. Response scales"
+  qmeasure7a:
+    head: "##### 7a. If nominal scale was used, are exact formulations of categories specified?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure7b:
+    head: "##### 7b. If Likert (or similar) scale was used, is a numerical range provided (e.g., 1 to 7, -3 to 3)?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure7c:
+    head: "##### 7c. If Likert (or similar) scale was used with non-numerical anchors/labels (e.g., “Strongly agree”), is it clear how many points were named (e.g., all, anchors, midpoint) and how exactly the labels were formulated?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure7d:
+    head: "##### 7d. Is it clear whether the scale was presented horizontally or diagonally?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  qmeasure8:
+    head: "#### 8. Description of study instructions"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Definitions**: Study instructions are all the information and directions given to study participants after recruitment and either before or during administration of the questionnaire. E.g., “You are going to participate in a very important study that may contribute to curing cancer, so it is vital that you answer each question thoughtfully and sincerely…”. Select “a. yes” if the exact formulation of study instructions is provided or if the instructions are described.
+  qmeasure9:
+    head: "#### 9. Duration of the probes (e.g., how much time for each question? Time limit on completion of questionnaire? Average completion time of questionnaire?)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions**: If one of these is given, answer “yes”.
+  qmeasure10:
+    head: "#### 10. Method of assignment to groups is described"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      **Coder instructions**: If the paper simply says that assignment was random, select “a. yes”. If there is only one group, select “c. not applicable”.
+  nqmeasure1:
+    head: "#### 1. Description of data-collection setting (specific enough to permit replication – “university classroom” is not enough)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure2:
+    head: "#### 2. Dates of data collection"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure3:
+    head: "#### 3. Times of day when data were collected"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure4:
+    head: "#### 4. Duration of data-collection sessions"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure5:
+    head: "#### 5. Method of assignment to groups"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure6:
+    head: "#### 6. Description of stimuli"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions**: Check if you can answer the following questions. If you answer more than two questions in the positive, choose “yes”.
+
+      Is it clear why the stimuli look as they do?
+
+      Would you know how to prepare similar stimuli?
+
+      Is it clear which differences between the stimuli are relevant and which are not?
+  nqmeasure7:
+    head: "#### 7. Completeness of stimuli description"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions**: Is it clear whether or not all the stimuli used in the study have been described in the paper?
+
+      In the case of measures or scales that are in general use (e.g., Cognitive reflection test or Wechsler adult intelligence scale) you can regard the description as complete if the full name of the scale is given along with a citation.
+  nqmeasure8:
+    head: "#### 8. Specification of software used to display stimuli, including the versions"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure9:
+    head: "#### 9. Description of equipment used to display stimuli"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure10:
+    head: "#### 10. Description of study instructions"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure11:
+    head: "#### 11. Description of how instructions were conveyed to the participants:"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure11a:
+    head: "##### 11a. Orally face-to-face/in writing/recording"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  nqmeasure11b:
+    head: "##### 11b. By whom?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  nqmeasure11c:
+    head: "##### 11c. When?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  nqmeasure11d:
+    head: "##### 11d. Is it clear whether the instructions were repeated?"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+  nqmeasure11e:
+    head: "##### 11e. Description of comprehension checks"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure12:
+    head: "#### 12. Description of each task (specific enough to permit replication)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+  nqmeasure13:
+    head: "#### 13. Description of all tools/instruments/equipment used to collect data"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure14:
+    head: "#### 14. Specification of all software used to collect data"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      Note that we are making a distinction here between stimulus display and data collection: sometimes, though not always, these are performed using different tools/instruments/equipment. E.g., when stimuli are pictures displayed on screen but an eye-tracker is used to see how the stimuli affected the participant. The computer, the screen and appropriate software are used to display the stimuli (see questions 8 and 9) and the eye-tracker and its attendant software are used to collect the data. If the same tools/instruments/equipment is used for both stimulus display and data collection then select the same answers for questions 13 and 14 as you did for questions 8 and 9.
+  nqmeasure15:
+    head: "#### 15. Discussion of validity and reliability of psychometric tools"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure16:
+    head: "#### 16. Description of inter-rater validity and rater reliability"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  nqmeasure17:
+    head: "#### 17. Is it clear whether manipulation checks were used?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Definitions**: Manipulation checks are methods of finding out whether the manipulation has had the intended effect. E.g., if a manipulation was intended to make participants feel ill at ease then did the experimenters measure this during/after manipulation – and, if so, how?
+  nqmeasure18:
+    head: "#### 18. Are manipulation checks described?"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+  flow1: 
+    head: "#### 1. Number of participants"
+    choices:
+      - ["N", "a. Incomplete information about participant flow provided", 0]
+      - ["Y", "b. Complete information about participant flow provided", 2]
+      - ["NA", "c. Not applicable", -1]
+    forcoders: |
+      **Definitions**: Information about participant flow consists of two items: i) pre-exclusion overall number of participants and (for studies with more than one group) the number of participants assigned to each group, ii) overall number of participants’ whose data were included in the analysis and (for studies with more than one group) the number of such participants in each group. This information can sometimes be extracted from a flowchart or some figure/table.
+
+      Select b) in the following cases:
+
+      1. It is clear that some participants were excluded: both i) and ii) are specified
+      2. It is clear that no participants were excluded: i) is specified.
+
+      Note that you should select a) if it is unclear how many participants were assigned to each group.
+
+      If the study design consists of only one group of participants and there is no information about exclusions, select c.
+  flow2:
+    head: "#### 2. A flowchart/figure/table of participant flow"
+    choices:
+      - ["Y", "a. yes", 0.5]
+      - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
+    forcoders: |
+      If the study design consists of only one group of participants and there is no information about exclusions, select c.
+  flow3:
+    head: "#### 3. Method of sample size calculation (power analysis, etc.)"
+    choices:
+      - ["Y", "a. yes", 1]
+      - ["N", "b. no", 0]
+    forcoders: |
+      **Comment**: Here we are not interested in correctness or appropriateness of method used to determine sample size. It is OK if any (reasonable) justification of given sample size is provided.
+
+      **Coder instructions**: For method of sample size calculation search for phrases such as “power”, “sample size”, etc. Note that a “post-hoc power analysis” (an analysis of how large an effect under investigation would have to be for the study to be able to detect it) cannot be treated as a method of sample size calculation.
+  descriptive1:
+    head: "#### 1. Simple descriptive statistics"
+    choices:
+      - ["N", "a. Neither central tendency nor dispersion provided for any measure used in the study is given.", 0]
+      - ["O", "b. Either central tendency or dispersion (for categorical variables: frequencies) is provided but: a) not both for all measures, b) not for all cells of experimental design (conditions, subgroups, etc.) or not all per-cell sample sizes are provided.", 1]
+      - ["B", "c. BOTH central tendency and dispersion provided for all measures (frequencies for categorical variables) used in study and for all cells (conditions, subgroups, etc.) in the study.", 2]
+    forcoders: |
+      **Coder instructions**: Check not only the main text but also tables, figures, appendices and footnotes. Look for common abbreviations such as “M” for mean and “SD” for standard deviation. Note that standard error of mean (commonly abbreviated as “SE” or “SEM”) is not a measure of dispersion of a variable).
+  descriptive2:
+    head: "#### 2. Confidence intervals"
+    choices:
+      - ["N", "a. No confidence intervals are reported for any measures.", 0]
+      - ["P", "b. Confidence intervals are reported only for some measures.", 0.5]
+      - ["Y", "c. Confidence intervals are reported for all measures.", 1]
+    forcoders: |
+      **Coder instructions**: Confidence intervals are reported in close proximity to means. Look for fragments like this: 95% CIs [5.62, 8.31], [-2.43, 4.31], and [-4.29, -3.11], respectively.
+
+      **Caution**: failure to state the level of confidence (95%, 90%, 99% etc.) is considered poor reporting. If you encounter it, consult journal guidelines – there might be a rule that all CI are 95%, though this is unlikely.
+  inferential1:
+    head: "#### 1. For inferential statistical tests (e.g., t, F, and chi-square tests)"
+    choices:
+      - ["N", "a. No test statistics are reported (only p-value or information about statistical significance).", 0]
+      - ["P", "b. Obtained magnitude or value of the test statistic is reported (with degrees of freedom etc.) for some but not all tests.", 1]
+      - ["Y", "c. Obtained magnitude or value of the test statistic is reported (with degrees of freedom etc.) for all tests.", 2]
+    forcoders: |
+      **Coder instructions**: For most common statistical techniques:
+
+      - Student t test and Welch t test should be accompanied by magnitude of test statistic (t) and degrees of freedom, e.g. t(23) = xx.
+      - For non-parametric alternatives to t tests, such as Mann-Whitney or Wilcoxon test, there is no standard for reporting test statistics (but U or z can sometimes be included).
+      - For binomial and multinomial test for given probabilities – by nature - there are no test statistics. Just p-value is fine. So if there is only p-value, select answer c.
+      - For Fisher’s exact test there is also no test statistic. Just p-value is fine. So if there is p-value, select answer c.
+      - Chi-square tests and McNemar test should be accompanied by magnitude of test statistic (chi-square) and degrees of freedom, e.g., Χ2(3) = x.xx.
+      - ANOVA should be accompanied by magnitude of test statistic (F ratio) and degrees of freedom, e.g., F(2,212) = x.xx.
+      - For testing hypotheses about slope of regression coefficient in linear or logistics regression there are many alternative but equivalent statistics that can be used (t, chi-squared) and different techniques. So if one of these is used, select answer c.
+      - For testing significance of correlation (Pearson’s, Spearman’s etc.) the test statistic t is commonly used but there are other options. We assume that magnitude of correlation (r, kappa or tau) and p value are sufficient to choose answer c.
+      - For Bayesian analyses, Bayesian Factor, instead of p-value, should be reported.
+  inferential2:
+    head: "#### 2. Reporting of p-values"
+    choices:
+      - ["N", "a. Most p-values are reported in an inexact manner or not reported at all.", 0]
+      - ["P", "b. Most but not all p-values are reported in an exact manner.", 0.5]
+      - ["Y", "c. All p-values are reported in an exact manner.", 1]
+    forcoders: |
+      **Definitions**: “Exact p value” refers to p value described to at least two decimal places that is greater than 0.001. Examples that count as “exact p value”:
+
+      - p = 0.30
+      - p = 0.032
+      - p = 0.045
+      - p < 0.001 (too small to elegantly report in the paper) Examples that do not count as “exact p value” -
+      - p < 0.05 (not exact because of incorrectly used “<”!) p < 0.01 (still not exact!) p=0.1 (too imprecise!)
+  inferential3:
+    head: "#### 3. Effect sizes"
+    choices:
+      - ["N", "a. Effect sizes are not reported", 0]
+      - ["P", "b. Effect sizes are reported in nonstandardized form.", 1]
+      - ["Y", "c. All or most effect sizes are reported in standardized form.", 2]
+    forcoders: |
+      **Coder instructions**: “Nonstandardized form” refers to effect sizes in terms of original units (e.g., raw differences in mean between two groups, differences in percentages, etc.). For “standardized form” look for commonly used measures of effect size such as Cohen’s d (for comparisons between two samples), η2 or ω2 for ANOVA (analysis of variance), ɸ or Cramer’s V for frequency data (chi-square test and similar techniques). All that information should be included in “Results” section of the paper. Note that if an effect is not statistically significant it is still considered good practice to report it in the paper.
+  interpretation:
+    head: "### A. Interpretation of results"
+    choices:
+      - ["N", "a. No discussion of how obtained results relate to the research problem or hypothesis.", 0]
+      - ["P", "b. A clear statement of how obtained results relate to the research problem or hypothesis.", 1]
+      - ["Y", "c. Both a clear statement of how obtained results relate to the research problem or hypothesis and a discussion of statistical conclusion validity.", 2]
+    forcoders: |
+      **Coder instructions**: As to a and b, a paper contains a discussion of how the results relate to the research question if it contains a clear statement of whether the results support a specific hypothesis/model described in the paper. A significant majority of papers are probably going to meet this minimal condition.
+
+      _Statistical conclusion validity_ concerns the question of whether the statistical conclusion is correct – i.e., whether the independent and dependent variables really covary in the manner described by the outcome of statistical inference (typically, saying that a relationship between study variables is statistically significant). Or, in another formulation, “SCV pertains to the extent to which data from a research study can reasonably be regarded as revealing a link (or lack thereof) between independent and dependent variables as far as statistical issues are concerned” (Garcia-Perez 2012). The underlying idea is that since any statistical conclusion is the result of an inference and any inference may be invalid, it is possible that the statistical conclusion reported in the paper is false. Threats to statistical conclusion validity include 1) low power, 2) violated assumptions of statistical tests, 3) inaccurate effect estimation and 4) unreliability of measures of study variables.
+
+      _We assume that a discussion of statistical conclusion validity is present if there is at least one instance where at least one of the threats listed above is described and assessed_. In other words, the authors have provided a discussion of statistical conclusion validity if they address the question “Is there a real possibility that our statistical conclusion is invalid?”. However, we stipulate that such a discussion should do at least two things: 1) raise the possibility and 2) assess how serious it is. We suspend judgement as to whether or not the discussion is complete or convincing.
+
+      Discussions of statistical conclusion validity may be scattered throughout the paper. Typically, they’re found together with theoretical background and method or after a description of obtained results. They may be expressed in terms of study limitations or directions for future research. Note that “post-hoc power analysis” can be understood as a way of assessing statistical conclusion validity.
+  validity:
+    head: "#### Indicate the number of threats to construct validity or generalizability discussed in the paper"
+    choices: # coders are filling in the actual number, choices only for scoring purpose
+      - ["0", "no discussion", 0]
+      - ["1", "1 threat", 1]
+      - ["2+", "2 or more", 2] # individuation of threats is a little bit subjective so we decided to binarize this variable for the scoring purposes
+    forcoders: |
+      **Coder instructions**: Construct validity is the extent to which a study’s operations reflect all and only the characteristics of the relevant construct (theoretical posit). There are two kinds of general threats to construct validity: construct underrepresentation, when some of the characteristics associated with the construct are ignored, and introduction of extraneous content (construct confounding), when the study’s operations incorporate some characteristics that are not associated with the construct (are part of a different construct).
+
+      E.g., let’s assume that having belief p involves both asserting P and asserting known consequences of P – in that case, treating a positive reply to the question “Do you believe that P?” as a sufficient measure of whether a person believes that P would be an instance of construct underrepresentation.
+
+      An example of construct confounding: Study operations usually involve more than one construct, which means that failure to recognize all the constructs involved may lead to invalid inferences. E.g., suppose researchers hypothesize that people respond differently to events described in abstract terms than they do to events described in concrete terms. To test this hypothesis, researchers may devise two kinds of vignettes. Suppose they fail to notice that all the concrete descriptions they have used in the study happen to denote emotionally charged events and all the abstract descriptions denote emotionally neutral events. Let’s say the participants responses do vary with the condition, which the researchers take to support their hypothesis. This is invalid because the difference in responses may have been due to emotional charge. In other words, the operationalization had introduced some extraneous content.
+
+      Two other threats that are likely to occur are:
+
+      - Mono-operation bias: Inferences based on single operationalizations may be invalid.
+      - Mono-method bias: When all operationalizations rely on the same method, that method actually becomes part of the construct under investigation. E.g., if the construct success in life is only ever measured using self-reports then what is actually measured is the construct success in life as reported by the individual.
+
+      - Generalizability (external validity) is the extent to which the results of a study generalize to other populations, settings, manipulations and measurement procedures. Given that most studies use samples of convenience, many discussions of external validity deal with the threat of sampling bias, which occurs when the sample in not representative of the target population. In experimental philosophy studies that are based on questionnaires, two standard sources of possible bias associated with manipulations rather than populations include framing effects – i.e., variations in judgments dependent on properties of description that are irrelevant to a given case – and order effects – i.e., variations in judgments associated with the order in which the cases (vignettes) are presented.
+
+      We assume that a discussion of construct validity or generalizability is present if there is at least one instance where a threat to construct validity or generalizability is described and assessed. E.g., “Our sample was drawn from US college students [threat of sampling bias] and it is impossible to tell if our conclusions hold for other populations as well [assessment].”
+
+      Discussions of construct validity and generalizability may be scattered throughout the paper. Typically, they’re found together with theoretical background and method or after a description of obtained results. They may be expressed in terms of study limitations or directions for future research.
