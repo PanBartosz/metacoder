@@ -32,6 +32,38 @@
     </div>
   {% endif %}
 
+  {% if results.scores %}
+    <h2>Scores</h2>
+    <div class="panel panel-default">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Short</th>
+                <th>TRANSPARENCY</th>
+                <th>THEORETICAL BACKGROUND</th>
+                <th>METHODS (GENERAL)</th>
+                <th>METHODS (QUESTIONNAIRE)</th>
+                <th>METHODS (NON-QUESTIONNAIRE)</th>
+                <th>RESULTS</th>
+                <th>CONCLUSIONS</th>
+              </tr>
+            </thead>
+            {% for row in results.scores %}
+            <tr>
+              <td> {{ row["short"] }} </td>
+              {% for part in row['parts'] %}
+              <td>
+               {% if not part['missing'] %}
+               {{ part["score"] }} / {{ part["max_score"] }} ({{ '%.2f' % (100 * (part["score"] / part["max_score"])) }}%) 
+               {% endif %}
+              </td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+            </table>
+    </div>
+  {% endif %}
+
   {% if results.differences %}
     <h2>Columns with Differences</h2>
     {% for diff in results.differences %}

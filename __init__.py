@@ -56,6 +56,7 @@ app.config['CKEDITOR_FILE_UPLOADER'] = 'upload'
 app.config['CKEDITOR_HEIGHT'] = 600
 app.config['CKEDITOR_EXTRA_PLUGINS'] = ['filebrowser']
 
+API_TOKEN = os.getenv("EXPORT_API_TOKEN", "change-me")
 
 
 #app.config['CKEDITOR_ENABLE_CSRF'] = True
@@ -243,7 +244,15 @@ def export_responses():
 
 
 def compare_xlsx_columns(df, translations):
-    excluded_columns = ["created_date", "modified_date", "id", "short", "recruitment1a"]
+    excluded_columns = ["created_date",
+                        "modified_date",
+                        "id",
+                        "short",
+                        "recruitment1a",
+                        "author_id"]
+    not_counted_columns = ["onlinefirst",
+                           "first_study"
+                           ]
     cols_to_check = [
         col for col in df.columns 
         if not col.endswith("_e") 
@@ -255,6 +264,20 @@ def compare_xlsx_columns(df, translations):
     disagreement_counter = 0
     differences_data = []
 
+    kind_of_study = df["kindofstudy"].unique()
+    methods_questionnaire = [part["questions"] for part in translations["parts"] if part["name"] == "METHODS (QUESTIONNAIRE)"][0]
+    methods_nonquestionnaire = [part["questions"] for part in translations["parts"] if part["name"] == "METHODS (NON-QUESTIONNAIRE)"][0]
+
+    excluded_questions = []
+    if len(kind_of_study) == 1 and kind_of_study[0] != "":
+        if kind_of_study[0] == "Q":
+            cols_to_check = [col for col in cols_to_check if col not in methods_nonquestionnaire]
+            excluded_questions = methods_nonquestionnaire
+        if kind_of_study[0] == "N":
+            cols_to_check = [col for col in cols_to_check if col not in methods_questionnaire]
+            excluded_questions = methods_questionnaire
+    print(cols_to_check)
+
     for col in cols_to_check:
         unique_vals = df[col].unique()
 
@@ -264,15 +287,24 @@ def compare_xlsx_columns(df, translations):
         if len(unique_vals == 1) and unique_vals[0] == "":
             continue
         if len(unique_vals) > 1:
-            disagreement_counter += 1
+            if col not in not_counted_columns:
+                disagreement_counter += 1
+            if col == "validity":
+                if all(num >= 2 for num in unique_vals):
+                    agreement_counter += 1
+                else:
+                    disagreement_counter += 1
+
             col_diffs = {
                 "column_name": col,
                 "column_title": translations["q"][col]["head"].strip("#").strip() 
                                 if col in translations["q"] else col,
                 "rows": []
             }
+            scores = []
             for idx, row in df.iterrows():
                 short_val = row["short"] if "short" in df.columns else "N/A"
+                scores.append({"short": short_val, "parts" : get_score(row, excluded_questions)})
                 col_val = row[col]
                 # Attempt to look up a friendly "choice" name
                 try:
@@ -298,8 +330,47 @@ def compare_xlsx_columns(df, translations):
         "differences": differences_data,
         "agreement_count": agreement_counter,
         "disagreement_count": disagreement_counter,
+        "scores" : scores,
         "total": agreement_counter + disagreement_counter
     }
+
+def get_score(row, excluded_questions = []):
+    results = [] 
+    for part in t['parts']:
+        part_results = {'name' : part["name"]}
+        max_score = 0
+        score = 0
+        for question in part['questions']:
+            if question in excluded_questions:
+                continue
+            if question == "validity":
+                max_score += 2
+                if row[question] == 1:
+                    score += 1
+                elif row[question] >= 2:
+                    score += 2
+                else:
+                    pass
+                continue
+                    
+            choices = t['q'][question]['choices']
+            try:
+                max_points = max([choice[2] for choice in choices])
+                selected = [selected for selected in t['q'][question]["choices"] if selected[0] == row[question]][0]
+                selected_score = selected[2]
+                if selected_score != -1:
+                    max_score = max_score + max_points
+                    score = score + selected_score
+            except:
+                pass
+        if max_score != 0:
+            part_results["max_score"] = max_score
+            part_results["score"] = score
+            part_results['missing'] = False
+        else:
+            part_results['missing'] = True
+        results.append(part_results)
+    return results
 
 @app.route("/compare", methods=["GET", "POST"])
 def compare():
@@ -322,3 +393,39 @@ def compare():
         return render_template("results.html", results=results)
 
     return render_template("upload_form.html")
+
+def export_all():
+    from datetime import datetime
+    with app.app_context():
+        articles = Article.query.all()
+        article_columns = [col.key for col in inspect(Article).attrs if hasattr(col, 'columns')]
+        data_list = []
+        for article in articles:
+            row_data = {}
+            row_data["username"] = article.author.username
+            row_data["created_at"] = article.created_date
+            row_data["modified_at"] = article.modified_date
+            for col_name in article_columns:
+                row_data[col_name] = getattr(article, col_name)
+            data_list.append(row_data)
+
+        df = pd.DataFrame(data_list, columns=article_columns)
+        file_name = f'results_{datetime.now().strftime("%Y%m%d-%H%M%S")}.csv'
+        df.to_csv(file_name, index=False)
+        return file_name
+
+@app.route("/results_latest.csv", methods=["GET"])
+def results_latest():
+    token = request.headers.get("X-API-KEY") or request.args.get("token")
+    if token != API_TOKEN:
+        abort(401)                                        # simple 401 response
+
+    csv_path = export_all()                    # create fresh snapshot
+    return send_file(
+        csv_path,
+        mimetype="text/csv",
+        as_attachment=True,
+        download_name="results_latest.csv",    # stable filename for clients
+    )
+    
+export_all()

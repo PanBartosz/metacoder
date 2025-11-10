@@ -223,7 +223,9 @@ q:
       - ["Y", "c. All data available.", 2]
       - ["NA", "d. Not applicable.", -1]
     forcoders: |
-      **Definitions**: Data – recorded information that the authors take to confirm the conclusions of the paper. We use “data” to refer to so-called raw data – i.e., recorded information in its rawest digital form, at the level of sampling units, usually participants.
+      **Definitions**: Data – recorded information that the authors take to confirm the conclusions of the paper. We use “data” to refer to so-called raw data – i.e., recorded information in its rawest digital form, at the level of sampling units, usually participants. This type of data is typically available as a downloadable file, such as a CSV or Excel spreadsheet.
+
+      **Note:** For this question, consider all the studies, not only the first one.
 
       **Coder instructions**: Select d.:
 
@@ -237,6 +239,8 @@ q:
       - ["NA", "c. Not applicable.", -1]
     forcoders: |
       **Definitions**: Analysis code – any form of computer code/software instruction used to analyze the data. Most common examples: R or Python scripts, SPSS syntax files, Stata scripts. A detailed step-by-step description of analysis in point-and-click statistical software also counts.
+
+      **Note:** For this question, consider all the studies, not only the first one.
 
       **Coder instructions**
 
@@ -348,7 +352,7 @@ q:
     head: "#### 1. Age (mean, median, standard deviation, range)"
     choices:
       - ["N", "a. No description.", 0]
-      - ["O", "b. Only a measure of central tendency (mean, median, etc.)", 0.5]
+      - ["O", "b. Only a measure of central tendency (mean, median, etc.) or only a measure of dispersion (standard deviation, variance, range, etc.)", 0.5]
       - ["P", "b. At least one measure of central tendency (mean, median, etc.) and at least one measure of dispersion (standard deviation, variance, range, etc.).", 0.75]
       - ["Y", "c. At least two measures of central tendency (mean, median, etc.) and at least two measures of dispersion (standard deviation, variance, range, etc.)", 1]
   participants2:
@@ -388,7 +392,7 @@ q:
       - ["Y", "a. yes", 1]
       - ["N", "b. no", 0]
   exclusion1:
-    head: "#### 2. If participants were excluded from analysis, does the paper specify general exclusion criteria employed?"
+    head: "#### 2. If participants were excluded from analysis, does the paper specify general exclusion criteria employed? (select a. also when the criteria are specified, but no participants were excluded)"
     choices:
       - ["Y", "a. yes", 1]
       - ["N", "b. no", 0]
@@ -520,11 +524,13 @@ q:
     choices:
       - ["Y", "a. yes", 0.5]
       - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
   qmeasure6e:
     head: "##### 6e. Is it clear if all the questions in the questionnaire were mandatory and, if not, which ones were and which were not?"
     choices:
       - ["Y", "a. yes", 0.5]
       - ["N", "b. no", 0]
+      - ["NA", "c. not applicable", -1]
   qmeasure6f:
     head: "##### 6f. Are technical measures taken to elicit specific behaviors from participants (time delay between questions etc.) adequately described?"
     choices:
@@ -540,7 +546,7 @@ q:
       - ["N", "b. no", 0]
       - ["NA", "c. not applicable", -1]
   qmeasure7b:
-    head: "##### 7b. If Likert (or similar) scale was used, is a numerical range provided (e.g., 1 to 7, -3 to 3)?"
+    head: "##### 7b. If Likert (or similar) scale was used, is a numerical range provided (e.g., 1 to 7, -3 to 3) or is it clearly stated, that the numbers were not presented to the participants?"
     choices:
       - ["Y", "a. yes", 0.5]
       - ["N", "b. no", 0]
@@ -760,7 +766,12 @@ q:
       - ["O", "b. Either central tendency or dispersion (for categorical variables: frequencies) is provided but: a) not both for all measures, b) not for all cells of experimental design (conditions, subgroups, etc.) or not all per-cell sample sizes are provided.", 1]
       - ["B", "c. BOTH central tendency and dispersion provided for all measures (frequencies for categorical variables) used in study and for all cells (conditions, subgroups, etc.) in the study.", 2]
     forcoders: |
-      **Coder instructions**: Check not only the main text but also tables, figures, appendices and footnotes. Look for common abbreviations such as “M” for mean and “SD” for standard deviation. Note that standard error of mean (commonly abbreviated as “SE” or “SEM”) is not a measure of dispersion of a variable).
+      **Coder instructions**: Check not only the main text but also tables, figures, appendices and footnotes. Look for common abbreviations such as “M” for mean and “SD” for standard deviation. Note that standard error of mean (commonly abbreviated as “SE” or “SEM”) is not a measure of dispersion of a variable). 
+
+      For categorical variables, percentages of each possible answer for all cells of the experimental design (condition) count as a measure of central tendency for the purpose of coding.
+
+      **Note**: If extracting some measures from the paper requires looking at the plots and physically measuring various parts of the plots (e.g., measuring error bars to extract SE), do not count them as provided in the paper.
+
   descriptive2:
     head: "#### 2. Confidence intervals"
     choices:
@@ -785,7 +796,7 @@ q:
       - For binomial and multinomial test for given probabilities – by nature - there are no test statistics. Just p-value is fine. So if there is only p-value, select answer c.
       - For Fisher’s exact test there is also no test statistic. Just p-value is fine. So if there is p-value, select answer c.
       - Chi-square tests and McNemar test should be accompanied by magnitude of test statistic (chi-square) and degrees of freedom, e.g., Χ2(3) = x.xx.
-      - ANOVA should be accompanied by magnitude of test statistic (F ratio) and degrees of freedom, e.g., F(2,212) = x.xx.
+      - ANOVA (and MANOVA) should be accompanied by magnitude of test statistic (F ratio) and degrees of freedom, e.g., F(2,212) = x.xx.
       - For testing hypotheses about slope of regression coefficient in linear or logistics regression there are many alternative but equivalent statistics that can be used (t, chi-squared) and different techniques. So if one of these is used, select answer c.
       - For testing significance of correlation (Pearson’s, Spearman’s etc.) the test statistic t is commonly used but there are other options. We assume that magnitude of correlation (r, kappa or tau) and p value are sufficient to choose answer c.
       - For Bayesian analyses, Bayesian Factor, instead of p-value, should be reported.
@@ -801,8 +812,12 @@ q:
       - p = 0.30
       - p = 0.032
       - p = 0.045
-      - p < 0.001 (too small to elegantly report in the paper) Examples that do not count as “exact p value” -
-      - p < 0.05 (not exact because of incorrectly used “<”!) p < 0.01 (still not exact!) p=0.1 (too imprecise!)
+      - p < 0.001 (too small to elegantly report in the paper, but OK) 
+      
+      Examples that do not count as “exact p value” -
+
+      - p < 0.05 (not exact because of incorrectly used “<”!) 
+      - p < 0.01 (still not exact!) p=0.1 (too imprecise!)
   inferential3:
     head: "#### 3. Effect sizes"
     choices:
@@ -811,6 +826,9 @@ q:
       - ["Y", "c. All or most effect sizes are reported in standardized form.", 2]
     forcoders: |
       **Coder instructions**: “Nonstandardized form” refers to effect sizes in terms of original units (e.g., raw differences in mean between two groups, differences in percentages, etc.). For “standardized form” look for commonly used measures of effect size such as Cohen’s d (for comparisons between two samples), η2 or ω2 for ANOVA (analysis of variance), ɸ or Cramer’s V for frequency data (chi-square test and similar techniques). All that information should be included in “Results” section of the paper. Note that if an effect is not statistically significant it is still considered good practice to report it in the paper.
+
+      Only select b. if the actual nonstandardized effect sizes are reported in the paper (such as differences between means or differences in percentages). Even if they can be calculated from the available data, if they are not reported in the paper, select a.
+
   interpretation:
     head: "### A. Interpretation of results"
     choices:

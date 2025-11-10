@@ -5,9 +5,6 @@ import argparse
 
 terminal_width = shutil.get_terminal_size(fallback=(80, 20)).columns-10
 
-with open("../XPHITQRI.yaml", "r") as f:
-    t = yaml.safe_load(f)
-
 parser = argparse.ArgumentParser(prog = "Inspect scoring of XPHI TQRI",
                                  description = "Using this tool you can view all items included in XPHI TQRI and inspect the scoring")
 
