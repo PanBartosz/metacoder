@@ -309,6 +309,9 @@
                 {{ ckefields.append("conceptual3_e") or '' }}
                 {{ rmd(t["sections"]["recruitment"]) }}
                 {{ rmd(get_header("recruitment1")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-recruitment1") %}
+{{ "recruitment1" | forcoders }}
+                {% endcall %}
                 {{ question_full_block(form.recruitment1, form.recruitment1_e, "recruitment1_e") }}
                 {{ ckefields.append("recruitment1_e") or '' }}
                 {{ rmd(get_header("recruitment1a")) }}
@@ -439,9 +442,12 @@
                 {% call render_info_block("FOR CODERS", "forcoders-stimuli-3") %}
 {{ "qmeasure4" | forcoders }}
                 {% endcall %}
-                {{ question_full_block(form.qmeasure4, form.qmeasure4_e, "qmeasure4") }}
+                {{ question_full_block(form.qmeasure4, form.qmeasure4_e, "qmeasure4_e") }}
                 {{ ckefields.append("qmeasure4_e") or '' }}
                 {{ rmd(get_header("qmeasure5")) }}
+                {% call render_info_block("FOR CODERS", "forcoders-stimuli-4") %}
+{{ "qmeasure5" | forcoders }}
+                {% endcall %}
                 {{ question_full_block(form.qmeasure5, form.qmeasure5_e, "qmeasure5_e") }}
                 {{ ckefields.append("qmeasure5_e") or '' }}
                 {{ rmd(get_header("qmeasure6")) }}
@@ -602,6 +608,9 @@
             <div class="tab-pane" id="results">
                 {{ rmd(t["sections"]["results"]) }}                
                 {{ rmd(t["sections"]["flow"]) }}
+                {% call render_info_block("FOR CODERS", "forcoders-results-intro") %}
+{{ "results_intro" | forcoders }}
+                {% endcall %}
                 {{ rmd(get_header("flow1")) }}
                 {% call render_info_block("FOR CODERS", "forcoders-flow") %}
 {{ "flow1" | forcoders }}

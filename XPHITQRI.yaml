@@ -175,6 +175,8 @@ q:
       **Definitions**: A paper is available free of charge if and only if it is officially made available for free by the publisher.
 
       **Coder instructions**: Preprints are typically uploaded to a repository such as ResearchGate, Academia.edu, arXiv, etc. Because the papers are frequently available via your research institution licence that is applied automatically, check whether the paper is open access by switching to *incognito mode* in your web browser.
+
+      If you determine that a preprint/author version is available (option c.), paste the link to that version into the evidence box.
   preregistration:
     head: "B. Pre-registration"
     choices: 
@@ -199,8 +201,10 @@ q:
       **Definitions**: _Statement of artefact/data availability_ – any indication that some/all artefacts have been made available on line. In can be as simple as a link in a footnote or as complex as a full sentence, such as “All study materials, data and analysis scripts are available at …”.
 
       **Coder instructions**: For this question, you need to consider three types of artefacts: materials, code, and data. For code, please note that in some cases, sharing is not required (see the "For Coders" section for question 4). If any category of artefact is missing from the availability statement, select b.
-      
-      An explanation as to why it was impossible, in a given instance, to share artefacts/data also counts as an artefact/data availability statement. In such a case, select b.
+
+      Explicit statements need not look formal. Phrases such as “All stories used in the study are available in Appendix B”, “Stimuli are included in Supplementary Table S2”, or “Data files can be found in Online Appendix A” count as statements of availability.
+
+      Likewise, sentences explaining why artefacts are *not* shared (e.g., “Data cannot be released due to confidentiality agreements”) count as statements, but they should be scored as option b.
   materials_availability:
     head: "#### 2. Materials availability"
     choices:
@@ -213,7 +217,18 @@ q:
 
       **Coder instructions**: Check the paper for materials/stimuli availability. For simple studies, it is possible that all stimuli are included in the main text of the paper. For more complex studies, check authors’ notes (endnotes/footnotes) for a link as well as Appendices to the paper and Supplementary materials on the publisher’s website. If some but not all materials (stimuli) are available, select b. If there is a full list of stimuli (not only examples of used stimuli or, e.g., only a subset of used vignettes), select c.  If all the materials are available in a ready-to-use format (e.g. entire survey is available to download as a PDF or a LimeSurvey/Qualtrics file, or script used to run experiment is downloadable) select d. 
 
-      **Important note:** In some cases, materials such as vignettes and survey questions may not be available as separate files but may be embedded in a data file as column headers, etc., and can be recovered with some effort. Carefully examine supplementary materials and data files, if available.
+      **Important note:** In some cases, materials such as vignettes and survey questions may not be available as separate files but may be embedded in a data file as column headers, etc., and can be recovered with some effort. Carefully examine supplementary materials and data files, if available. 
+      
+      **Non-English studies:** If the study was conducted in a language other than English, providing only an English translation does **not** count as making the study materials available; the original-language materials (or files sufficient to recreate them) must be accessible to select c/d.
+
+      **Proprietary materials:** If the study uses proprietary or licensed instruments (e.g., copyrighted psychometric scales) that cannot legally be shared, select “a” (nothing shared) or “b” (only other materials shared) as appropriate and clearly record the restriction in the evidence box.
+
+      Even when no explicit statement of availability is present, still search for materials, data, and code. Practical strategies:
+
+      - Follow every link in footnotes/endnotes, acknowledgements, author notes, and publisher landing pages.
+      - Search common repositories (OSF, GitHub, Figshare, institutional sites) by combining author names and article title with keywords like “materials”, “survey”, “data”, “analysis code”.
+
+      Apply these strategies when answering the materials, data, and code availability questions below.
 
   data_availability:
     head: "#### 3. Data availability"
@@ -323,6 +338,8 @@ q:
       - ["Y", "a. yes", 1]
       - ["P", "b. partly", 0.5]
       - ["N", "c. no", 0]
+    forcoders: |
+      Knowing *who* the participants were (“university students”, “philosophers”, etc.) is not the same as knowing *how* they were recruited. To code “a. yes” you need a concrete description of the channel or procedure (e.g., “recruited via Prolific”, “email sent to 2nd-year philosophy majors”). Statements like “participants were recruited from the University of Wonderland psychology program” without further detail should be scored as “b. partly”.
   recruitment1a:
     head: "#### 1a. What is missing?" 
   recruitment2:
@@ -353,8 +370,8 @@ q:
     choices:
       - ["N", "a. No description.", 0]
       - ["O", "b. Only a measure of central tendency (mean, median, etc.) or only a measure of dispersion (standard deviation, variance, range, etc.)", 0.5]
-      - ["P", "b. At least one measure of central tendency (mean, median, etc.) and at least one measure of dispersion (standard deviation, variance, range, etc.).", 0.75]
-      - ["Y", "c. At least two measures of central tendency (mean, median, etc.) and at least two measures of dispersion (standard deviation, variance, range, etc.)", 1]
+      - ["P", "c. At least one measure of central tendency (mean, median, etc.) and at least one measure of dispersion (standard deviation, variance, range, etc.).", 0.75]
+      - ["Y", "d. At least two measures of central tendency (mean, median, etc.) and at least two measures of dispersion (standard deviation, variance, range, etc.)", 1]
   participants2:
     head: "#### 2. Gender"
     choices:
@@ -472,6 +489,8 @@ q:
       - ["NA", "c. not applicable", -1]
     forcoders: |
       **Coder instructions**: If the survey was an on-line survey, then select “c. not applicable”.
+      
+      “Paper questionnaire” (or an equally explicit statement) is sufficient to answer “a. yes”. General context clues such as “classroom setting” or “lab session” are not enough—if the implement itself is not clearly stated, select “b. no”.
   qmeasure3:
     head: "#### 3. Description of the construction of materials / stimuli"
     choices:
@@ -493,15 +512,19 @@ q:
       - ["N", "b. no", 0]
     forcoders: |
       If a data file, project repository, or additional supplementary materials are available, take into account the information included there when answering questions 4–10. For example, sometimes the exact formulation of the probes used in the study is not included in the paper itself but is available in a repository or embedded in data files as headers.
+
+      For agreement-style items (e.g., “To what extent do you agree…?”), both parts must appear verbatim: the statement participants evaluate **and** the agreement prompt (question stem plus any anchors). If either portion is only described in reported speech, select “b. no”.
   qmeasure5:
     head: "#### 5. Completeness of stimuli description"
     choices:
       - ["Y", "a. yes", 1]
       - ["N", "b. no", 0]
+    forcoders: |
+      **Coder instructions**: This item focuses on whether the write-up provides enough detail to understand the full set of stimuli. Unlike the materials-availability question above, back-translated English versions of non-English stimuli count here, as long as they allow the reader to grasp every element that participants saw. Likewise, if the study uses proprietary/paid instruments that cannot be shared, a thorough description of what those instruments contain still counts toward completeness. Document any such cases in the evidence box.
   qmeasure6:
     head: "#### 6. Presentation of the stimuli"
   qmeasure6a:
-    head: "##### 6a. Is it specified whether stimuli (vignettes) were presented together with the probes (questions) or separately?"
+    head: "##### 6a. Is it specified whether stimuli (vignettes) were presented together with the probes (questions) or separately (i.e., on the same page/screen)?"
     choices:
       - ["Y", "a. yes", 0.5]
       - ["N", "b. no", 0]
@@ -540,7 +563,7 @@ q:
   qmeasure7:
     head: "#### 7. Response scales"
   qmeasure7a:
-    head: "##### 7a. If nominal scale was used, are exact formulations of categories specified?"
+    head: "##### 7a. If a nominal scale was used for the key study measures (not demographic/background questions), are exact formulations of categories specified?"
     choices:
       - ["Y", "a. yes", 0.5]
       - ["N", "b. no", 0]
@@ -585,6 +608,8 @@ q:
       - ["NA", "c. not applicable", -1]
     forcoders: |
       **Coder instructions**: If the paper simply says that assignment was random, select “a. yes”. If there is only one group, select “c. not applicable”.
+
+      Fixed or rule-based assignments also count as a described method. For example, a sentence such as “Participants who identified as professional philosophers were placed in Group 1, and everyone else was placed in Group 2” should be treated as “a. yes” because it makes clear how group membership was determined.
   nqmeasure1:
     head: "#### 1. Description of data-collection setting (specific enough to permit replication – “university classroom” is not enough)"
     choices:
@@ -725,6 +750,11 @@ q:
       - ["Y", "a. yes", 1]
       - ["N", "b. no", 0]
       - ["NA", "c. not applicable", -1]
+  results_intro:
+    forcoders: |
+      **Where to look for results information**
+
+      Details needed to answer the questions in the Results section (participant flow, descriptive statistics, and inferential statistics) may be distributed across the paper. Use all available sources—tables/figures in the main text, supplementary materials, appendices, and footnotes/endnotes.
   flow1: 
     head: "#### 1. Number of participants"
     choices:
