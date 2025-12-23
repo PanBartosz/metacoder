@@ -6,6 +6,8 @@
   const articleId = meta.dataset.articleId || "unknown";
   const userId = meta.dataset.userId || "anon";
 
+  const FIELD_NAME_PREFIX = "field:";
+
   const modalEl = document.getElementById("evidence-modal");
   const modalTitleEl = document.getElementById("evidence-modal-title");
   const modalDoneEl = document.getElementById("evidence-modal-done");
@@ -111,6 +113,87 @@
 
   const getFieldTextarea = (fieldId) => document.getElementById(fieldId);
 
+  const cssEscape = (value) => {
+    if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(value);
+    return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+  };
+
+  const getElementsByName = (name) => {
+    if (!name) return [];
+    const selector = `[name="${cssEscape(name)}"]`;
+    return Array.from(document.querySelectorAll(selector));
+  };
+
+  const serializeFieldByName = (name) => {
+    const els = getElementsByName(name);
+    if (!els.length) return null;
+
+    if (els.length === 1) {
+      const el = els[0];
+      if (el.tagName === "SELECT" && el.multiple) {
+        const selected = Array.from(el.options)
+          .filter((opt) => opt.selected)
+          .map((opt) => opt.value);
+        selected.sort();
+        return JSON.stringify(selected);
+      }
+
+      if (el.type === "checkbox") return el.checked ? "1" : "0";
+      return el.value || "";
+    }
+
+    if (els.every((el) => el.type === "radio")) {
+      const checked = els.find((el) => el.checked);
+      return checked ? checked.value : "";
+    }
+
+    if (els.every((el) => el.type === "checkbox")) {
+      const checkedValues = els.filter((el) => el.checked).map((el) => el.value);
+      checkedValues.sort();
+      return JSON.stringify(checkedValues);
+    }
+
+    return null;
+  };
+
+  const applyDraftToFieldByName = (name, rawValue) => {
+    const els = getElementsByName(name);
+    if (!els.length) return false;
+
+    if (els.length === 1) {
+      const el = els[0];
+      if (el.tagName === "SELECT" && el.multiple) {
+        const parsed = safeJsonParse(rawValue);
+        const selected = Array.isArray(parsed) ? new Set(parsed.map(String)) : new Set();
+        for (const opt of Array.from(el.options)) opt.selected = selected.has(String(opt.value));
+        return true;
+      }
+
+      if (el.type === "checkbox") {
+        el.checked = rawValue === "1" || rawValue === "true" || rawValue === "on";
+        return true;
+      }
+
+      el.value = rawValue || "";
+      return true;
+    }
+
+    if (els.every((el) => el.type === "radio")) {
+      for (const el of els) el.checked = (rawValue || "") !== "" && String(el.value) === String(rawValue);
+      if ((rawValue || "") === "") for (const el of els) el.checked = false;
+      return true;
+    }
+
+    if (els.every((el) => el.type === "checkbox")) {
+      const parsed = safeJsonParse(rawValue);
+      const selected = Array.isArray(parsed) ? new Set(parsed.map(String)) : new Set();
+      for (const el of els) el.checked = selected.has(String(el.value));
+      return true;
+    }
+
+    return false;
+  };
+
   const syncActiveFieldFromEditor = () => {
     if (!activeFieldId || !editor) return;
     if (editor.status && editor.status !== "ready") return;
@@ -173,6 +256,31 @@
 
     let restoredCount = 0;
     for (const fieldId of index) {
+      if (fieldId.startsWith(FIELD_NAME_PREFIX)) {
+        const name = fieldId.slice(FIELD_NAME_PREFIX.length);
+        const current = serializeFieldByName(name);
+        if (current === null) {
+          clearDraft(fieldId);
+          continue;
+        }
+
+        const draft = safeJsonParse(localStorage.getItem(draftKey(fieldId)));
+        if (!draft || typeof draft.value !== "string") {
+          clearDraft(fieldId);
+          continue;
+        }
+
+        if ((draft.value || "") === (current || "")) {
+          clearDraft(fieldId);
+          continue;
+        }
+
+        const applied = applyDraftToFieldByName(name, draft.value);
+        if (applied) restoredCount += 1;
+        else clearDraft(fieldId);
+        continue;
+      }
+
       const textarea = getFieldTextarea(fieldId);
       if (!textarea) continue;
 
@@ -297,6 +405,7 @@
 
   const wiredInputDrafts = new Set();
   const wiredCkeditorDrafts = new Set();
+  const wiredNameDrafts = new Set();
 
   const wireInlineDraftAutosave = () => {
     const fields = document.querySelectorAll(".draft-autosave");
@@ -354,9 +463,61 @@
     return wiredAny;
   };
 
+  const wireNameDraftAutosave = () => {
+    const form = document.querySelector("form");
+    if (!form) return;
+
+    const skipNames = new Set(["csrf_token"]);
+    const timeouts = new Map();
+
+    const isEligible = (el) => {
+      if (!el || !el.name) return false;
+      if (skipNames.has(el.name)) return false;
+      if (el.classList && (el.classList.contains("draft-autosave") || el.classList.contains("evidence-storage"))) {
+        return false;
+      }
+      const tag = (el.tagName || "").toUpperCase();
+      if (tag !== "INPUT" && tag !== "SELECT" && tag !== "TEXTAREA") return false;
+      const type = (el.getAttribute("type") || "").toLowerCase();
+      if (type === "hidden" || type === "submit" || type === "button" || type === "reset" || type === "file") return false;
+      if (el.disabled) return false;
+      return true;
+    };
+
+    const scheduleSave = (name) => {
+      if (!name || wiredNameDrafts.has(name)) {
+        // still debounce via Map; wiredNameDrafts is used only to track that the feature is enabled
+      }
+      const serialized = serializeFieldByName(name);
+      if (serialized === null) return;
+      hasUnsavedChanges = true;
+
+      const previous = timeouts.get(name);
+      if (previous) window.clearTimeout(previous);
+      timeouts.set(
+        name,
+        window.setTimeout(() => {
+          saveDraft(`${FIELD_NAME_PREFIX}${name}`, serialized);
+        }, 350),
+      );
+    };
+
+    const handler = (event) => {
+      const el = event.target;
+      if (!isEligible(el)) return;
+      scheduleSave(el.name);
+    };
+
+    form.addEventListener("input", handler, true);
+    form.addEventListener("change", handler, true);
+
+    wiredNameDrafts.add("*");
+  };
+
   if (mode === "edit") {
     restoreDrafts();
     wireInlineDraftAutosave();
+    wireNameDraftAutosave();
     // CKEditor instances are created later; keep trying briefly.
     let tries = 0;
     const timer = window.setInterval(() => {

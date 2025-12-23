@@ -1,32 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-
-body {
-	font-family: "Lato", sans-serif !important;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	font-family: "Roboto", sans-serif !important;
-}
+/* App-specific styles layered on top of Bootstrap + static/app.css */
 
 .site-title {
 	display: inline-block !important;
-	color: #2d475b !important;
-	font-weight: bold !important;
-	font-size: 0.7em !important;
+	color: var(--app-text, #1f2937) !important;
+	font-weight: 700 !important;
+	font-size: 0.85em !important;
 	text-transform: uppercase;
-	font-family: "Roboto", sans-serif !important;
-	margin-top: 16px;
+	letter-spacing: 0.03em;
+	margin-top: 8px;
 }
 
 img.logo {
 	max-width: 120px;
-	margin-right: 40px;
+	margin-right: 18px;
 	display: inline-block;
 
 }
@@ -38,16 +24,18 @@ img.logo {
 		display: none;
 	}
 
-	button {
-		display: none;
-	}
-
+	.app-navbar,
+	.navbar,
+	button,
+	.btn,
+	#main-nav,
 	ul.nav {
 		display: none;
 	}
 
 	a {
-		display: none;
+		color: inherit !important;
+		text-decoration: none !important;
 	}
 
 	.evidence-block,
@@ -79,12 +67,13 @@ img.logo {
 .question-container {
 	display: flex;
 	justify-content: space-between;
+	gap: 16px;
 
 }
 
 .question {
 	flex: 0 0 65%;
-	margin-right: 30px;
+	margin-right: 0;
 
 }
 
@@ -92,8 +81,10 @@ img.logo {
 	flex: 0 0 30%;
 	word-wrap: break-word !important;
 	overflow-wrap: break-word;
-	border: 1px solid #2d475b;
-	padding: 8px;
+	border: 1px solid var(--app-border, #e5e7eb);
+	border-radius: 12px;
+	background: #f9fafb;
+	padding: 12px;
 
 }
 
@@ -134,4 +125,369 @@ img.logo {
 
 .cke_notification_warning {
 	display: none;
+}
+
+/* View/edit section navigation
+   - Desktop: left sidebar (C)
+   - Smaller screens: compact tabs + action toolbar (A) */
+body.endpoint-edit #main-nav,
+body.endpoint-view #main-nav,
+body.endpoint-_print #main-nav {
+	border-bottom: 0;
+	margin-top: 12px;
+}
+
+body.endpoint-edit #main-nav > li,
+body.endpoint-view #main-nav > li,
+body.endpoint-_print #main-nav > li {
+	float: none;
+}
+
+body.endpoint-edit #main-nav .validation-badge,
+body.endpoint-view #main-nav .validation-badge,
+body.endpoint-_print #main-nav .validation-badge {
+	background: #dc2626;
+}
+
+body.endpoint-edit:not(.mode-edit) #main-nav > li:last-child,
+body.endpoint-view:not(.mode-edit) #main-nav > li:last-child,
+body.endpoint-_print:not(.mode-edit) #main-nav > li:last-child {
+	display: none;
+}
+
+body.endpoint-edit #main-nav > li.app-sidebar-back,
+body.endpoint-view #main-nav > li.app-sidebar-back,
+body.endpoint-_print #main-nav > li.app-sidebar-back {
+	display: none;
+}
+
+body.endpoint-edit #main-nav > li.app-sidebar-article,
+body.endpoint-view #main-nav > li.app-sidebar-article,
+body.endpoint-_print #main-nav > li.app-sidebar-article {
+	display: none;
+}
+
+@media screen and (max-width: 1199px) {
+	body.endpoint-edit #main-nav,
+	body.endpoint-view #main-nav,
+	body.endpoint-_print #main-nav {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px;
+		padding: 10px;
+		border: 1px solid var(--app-border, #e5e7eb);
+		border-radius: 12px;
+		background: #ffffff;
+	}
+
+	body.endpoint-edit #main-nav > li,
+	body.endpoint-view #main-nav > li,
+	body.endpoint-_print #main-nav > li {
+		margin: 0;
+	}
+
+	body.endpoint-edit #main-nav > li:not(:last-child),
+	body.endpoint-view #main-nav > li:not(:last-child),
+	body.endpoint-_print #main-nav > li:not(:last-child) {
+		order: 1;
+	}
+
+	body.endpoint-edit #main-nav > li > a,
+	body.endpoint-view #main-nav > li > a,
+	body.endpoint-_print #main-nav > li > a {
+		margin: 0;
+		padding: 8px 10px;
+		border: 1px solid var(--app-border, #e5e7eb);
+		border-radius: 999px;
+		background: #f9fafb;
+		color: var(--app-muted, #6b7280);
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		line-height: 1.2;
+	}
+
+	body.endpoint-edit #main-nav > li > a:hover,
+	body.endpoint-edit #main-nav > li > a:focus,
+	body.endpoint-view #main-nav > li > a:hover,
+	body.endpoint-view #main-nav > li > a:focus,
+	body.endpoint-_print #main-nav > li > a:hover,
+	body.endpoint-_print #main-nav > li > a:focus {
+		background: #ffffff;
+		color: var(--app-text, #1f2937);
+		text-decoration: none;
+	}
+
+	body.endpoint-edit #main-nav > li.active > a,
+	body.endpoint-edit #main-nav > li.active > a:hover,
+	body.endpoint-edit #main-nav > li.active > a:focus,
+	body.endpoint-view #main-nav > li.active > a,
+	body.endpoint-view #main-nav > li.active > a:hover,
+	body.endpoint-view #main-nav > li.active > a:focus,
+	body.endpoint-_print #main-nav > li.active > a,
+	body.endpoint-_print #main-nav > li.active > a:hover,
+	body.endpoint-_print #main-nav > li.active > a:focus {
+		background: #eef6ff;
+		border-color: #cfe6ff;
+		color: var(--app-text, #1f2937);
+		font-weight: 600;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child,
+	body.endpoint-view #main-nav > li:last-child,
+	body.endpoint-_print #main-nav > li:last-child {
+		order: 2;
+		flex: 1 0 100%;
+		margin-top: 6px;
+		padding-top: 10px;
+		border-top: 1px solid var(--app-border, #e5e7eb);
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 8px;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child .form-group,
+	body.endpoint-view #main-nav > li:last-child .form-group,
+	body.endpoint-_print #main-nav > li:last-child .form-group {
+		margin: 0;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child .btn,
+	body.endpoint-edit #main-nav > li:last-child input[type="submit"],
+	body.endpoint-view #main-nav > li:last-child .btn,
+	body.endpoint-view #main-nav > li:last-child input[type="submit"],
+	body.endpoint-_print #main-nav > li:last-child .btn,
+	body.endpoint-_print #main-nav > li:last-child input[type="submit"] {
+		width: 100%;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	body.endpoint-edit .app-main > .container,
+	body.endpoint-view .app-main > .container,
+	body.endpoint-_print .app-main > .container {
+		width: auto;
+		max-width: 1320px;
+	}
+
+	body.endpoint-edit form.form,
+	body.endpoint-view form.form,
+	body.endpoint-_print form.form {
+		display: grid;
+		grid-template-columns: 240px minmax(0, 1fr);
+		gap: 18px;
+		align-items: start;
+	}
+
+	body.endpoint-edit.mode-edit form.form .tab-content ~ .form-group {
+		display: none;
+	}
+
+	body.endpoint-edit.mode-edit form.form .tab-content ~ input[type="submit"][name="save"],
+	body.endpoint-edit.mode-edit form.form .tab-content ~ button[type="submit"][name="save"] {
+		display: none;
+	}
+
+	body.endpoint-edit form.form > h2,
+	body.endpoint-view form.form > h2,
+	body.endpoint-_print form.form > h2 {
+		grid-column: 1 / -1;
+		margin-top: 0;
+		display: none;
+	}
+
+	body.endpoint-edit #main-nav,
+	body.endpoint-view #main-nav,
+	body.endpoint-_print #main-nav {
+		grid-column: 1;
+		align-self: start;
+		margin: 0;
+		padding: 12px;
+		border: 1px solid var(--app-border, #e5e7eb);
+		border-radius: 12px;
+		background: #f9fafb;
+		position: sticky;
+		top: 74px;
+		max-height: calc(100vh - 92px);
+		overflow: auto;
+	}
+
+	body.endpoint-edit #questionnaire,
+	body.endpoint-view #questionnaire,
+	body.endpoint-_print #questionnaire {
+		grid-column: 2;
+		min-width: 0;
+	}
+
+	body.endpoint-edit #main-nav > li,
+	body.endpoint-view #main-nav > li,
+	body.endpoint-_print #main-nav > li {
+		display: block;
+		margin: 0 0 6px;
+	}
+
+	body.endpoint-edit #main-nav > li > a,
+	body.endpoint-view #main-nav > li > a,
+	body.endpoint-_print #main-nav > li > a {
+		margin: 0;
+		padding: 10px 12px;
+		border: 1px solid transparent;
+		border-radius: 10px;
+		background: transparent;
+		color: var(--app-muted, #6b7280);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 10px;
+		white-space: normal;
+	}
+
+	body.endpoint-edit #main-nav > li > a:hover,
+	body.endpoint-edit #main-nav > li > a:focus,
+	body.endpoint-view #main-nav > li > a:hover,
+	body.endpoint-view #main-nav > li > a:focus,
+	body.endpoint-_print #main-nav > li > a:hover,
+	body.endpoint-_print #main-nav > li > a:focus {
+		background: #ffffff;
+		border-color: var(--app-border, #e5e7eb);
+		color: var(--app-text, #1f2937);
+		text-decoration: none;
+	}
+
+	body.endpoint-edit #main-nav > li.active > a,
+	body.endpoint-edit #main-nav > li.active > a:hover,
+	body.endpoint-edit #main-nav > li.active > a:focus,
+	body.endpoint-view #main-nav > li.active > a,
+	body.endpoint-view #main-nav > li.active > a:hover,
+	body.endpoint-view #main-nav > li.active > a:focus,
+	body.endpoint-_print #main-nav > li.active > a,
+	body.endpoint-_print #main-nav > li.active > a:hover,
+	body.endpoint-_print #main-nav > li.active > a:focus {
+		background: #eef6ff;
+		border-color: #cfe6ff;
+		color: var(--app-text, #1f2937);
+		font-weight: 600;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child,
+	body.endpoint-view #main-nav > li:last-child,
+	body.endpoint-_print #main-nav > li:last-child {
+		margin-top: 12px;
+		padding-top: 12px;
+		border-top: 1px solid var(--app-border, #e5e7eb);
+		display: grid;
+		gap: 8px;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child .form-group,
+	body.endpoint-view #main-nav > li:last-child .form-group,
+	body.endpoint-_print #main-nav > li:last-child .form-group {
+		margin: 0;
+	}
+
+	body.endpoint-edit #main-nav > li:last-child .btn,
+	body.endpoint-edit #main-nav > li:last-child input[type="submit"],
+	body.endpoint-view #main-nav > li:last-child .btn,
+	body.endpoint-view #main-nav > li:last-child input[type="submit"],
+	body.endpoint-_print #main-nav > li:last-child .btn,
+	body.endpoint-_print #main-nav > li:last-child input[type="submit"] {
+		width: 100%;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-back,
+	body.endpoint-view #main-nav > li.app-sidebar-back,
+	body.endpoint-_print #main-nav > li.app-sidebar-back {
+		display: block;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid var(--app-border, #e5e7eb);
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-back > a,
+	body.endpoint-view #main-nav > li.app-sidebar-back > a,
+	body.endpoint-_print #main-nav > li.app-sidebar-back > a {
+		justify-content: flex-start;
+		font-weight: 600;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-back > a::before,
+	body.endpoint-view #main-nav > li.app-sidebar-back > a::before,
+	body.endpoint-_print #main-nav > li.app-sidebar-back > a::before {
+		content: "←";
+		color: var(--app-muted, #6b7280);
+	}
+
+	body.endpoint-edit a.app-go-back-inline,
+	body.endpoint-view a.app-go-back-inline,
+	body.endpoint-_print a.app-go-back-inline {
+		display: none;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-article,
+	body.endpoint-view #main-nav > li.app-sidebar-article,
+	body.endpoint-_print #main-nav > li.app-sidebar-article {
+		display: block;
+		margin-bottom: 12px;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-article .app-sidebar-article-wrap,
+	body.endpoint-view #main-nav > li.app-sidebar-article .app-sidebar-article-wrap,
+	body.endpoint-_print #main-nav > li.app-sidebar-article .app-sidebar-article-wrap {
+		padding: 10px 12px;
+		border: 1px solid var(--app-border, #e5e7eb);
+		border-radius: 10px;
+		background: #ffffff;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-article .app-sidebar-article-label,
+	body.endpoint-view #main-nav > li.app-sidebar-article .app-sidebar-article-label,
+	body.endpoint-_print #main-nav > li.app-sidebar-article .app-sidebar-article-label {
+		color: var(--app-muted, #6b7280);
+		font-size: 12px;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		margin-bottom: 6px;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-article .app-sidebar-article-primary,
+	body.endpoint-view #main-nav > li.app-sidebar-article .app-sidebar-article-primary,
+	body.endpoint-_print #main-nav > li.app-sidebar-article .app-sidebar-article-primary {
+		color: var(--app-text, #1f2937);
+		font-weight: 700;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	body.endpoint-edit #main-nav > li.app-sidebar-article .app-sidebar-article-secondary,
+	body.endpoint-view #main-nav > li.app-sidebar-article .app-sidebar-article-secondary,
+	body.endpoint-_print #main-nav > li.app-sidebar-article .app-sidebar-article-secondary {
+		margin-top: 4px;
+		color: var(--app-muted, #6b7280);
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 767px) {
+	.site-title {
+		display: block !important;
+		font-size: 0.95em !important;
+		margin-top: 6px;
+	}
+
+	.container h1 > img {
+		max-width: 88px;
+		height: auto;
+	}
+
+	.question-container {
+		flex-direction: column;
+	}
+
+	.question,
+	.evidence-block {
+		flex: 1 1 auto;
+		width: 100%;
+	}
 }
