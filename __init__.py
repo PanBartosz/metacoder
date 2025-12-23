@@ -32,7 +32,8 @@ def get_text(q):
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = 'trudnytajnyklucz'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + BASE_PATH + '/baza.db'
+DATABASE_PATH = os.getenv("DATABASE_PATH") or os.path.join(BASE_PATH, "baza.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.abspath(DATABASE_PATH)
 UPLOAD_FOLDER = BASE_PATH + '/media/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['UPLOADED_PHOTOS_DEST'] = 'media/images'  # Destination for uploaded images
@@ -427,5 +428,3 @@ def results_latest():
         as_attachment=True,
         download_name="results_latest.csv",    # stable filename for clients
     )
-    
-export_all()

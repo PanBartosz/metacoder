@@ -12,6 +12,7 @@ You can run it locally using `conda` (https://docs.anaconda.com/miniconda/instal
 - `environment.yml` contains an environment file for `conda`, so to create new environment you need to run `conda env create --name metacoder --file=environment.yml` and switch to it using `conda activate metacoder`
 - to run the app you need to:
   - set `BASE_PATH` environmental variable to the directory containing the app and `FLASK_APP` to `__init__.py` 
+  - optionally set `DATABASE_PATH` to point to a writable SQLite file (useful to keep your working DB outside the repo, e.g. `instance/baza.db`)
   - run `flask shell` and `db.create_all()` inside the shell to create an empty database
   - run `flask run` in the app directory
 

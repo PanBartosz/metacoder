@@ -1,12 +1,15 @@
 {% extends "bootstrap/base.html" %}
 
 {% import "bootstrap/wtf.html" as wtf %}
-{% from "macros.html" import rmd, render_info_block, question_block, question_container_block, question_full_block, modal_block with context %}
+{% from "macros.html" import rmd, render_info_block, question_full_block, evidence_block with context %}
 
 {% block scripts %}
 {{super() }}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.22.6/dist/bootstrap-table.min.js"></script>
+<script src="{{ url_for('static', filename='evidence_editor.js') }}"></script>
+{% if mode == "edit" %}
 <script src="{{ url_for('static', filename='validator.js') }}"></script>
+{% endif %}
 <script>
     $(document).ready(function () {
         // Activate the last active tab from local storage
@@ -19,7 +22,9 @@
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             localStorage.setItem('activeTab', $(e.target).attr('href'));
         });
-        $.fn.Modal.prototype.enforceFocus = function () {} 
+        if ($.fn.modal && $.fn.modal.Constructor) {
+            $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+        }
     });
 
     {% if printable %}
@@ -99,6 +104,15 @@
 
     {% if current_user.is_authenticated %}
 
+    <div id="page-meta"
+         data-article-id="{{ form.id.data }}"
+         data-user-id="{{ current_user.id }}"
+         data-mode="{{ mode }}"
+         data-printable="{{ printable|default(false) }}"
+    ></div>
+
+    <div id="draft-banner" class="alert alert-warning" style="display:none"></div>
+    <div id="validation-summary" class="alert alert-danger" style="display:none"></div>
 
     <form class="form" method="post" role="form" action="{{ url_for('edit') }}">
         {% set ckefields = [] %}
@@ -109,36 +123,43 @@
             <li role="presentation" class="active">
                 <a href="#general" data-toggle="tab">
                     {{ t["nav"]["general"] }}
+                    <span class="badge validation-badge" data-tab="general" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#transparency" data-toggle="tab">
                     {{ t["nav"]["transparency"] }}
+                    <span class="badge validation-badge" data-tab="transparency" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#methods" data-toggle="tab">
                     {{ t["nav"]["methods"] }}
+                    <span class="badge validation-badge" data-tab="methods" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation" id="methodsnq-tab">
                 <a href="#methodsn" data-toggle="tab">
                     {{ t["nav"]["methodsn"] }}
+                    <span class="badge validation-badge" data-tab="methodsn" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation" id="methodsq-tab">
                 <a href="#methodsq" data-toggle="tab">
                     {{ t["nav"]["methodsq"] }}
+                    <span class="badge validation-badge" data-tab="methodsq" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#results" data-toggle="tab">
                     {{ t["nav"]["results"] }}
+                    <span class="badge validation-badge" data-tab="results" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation">
                 <a href="#conclusions" data-toggle="tab">
                     {{ t["nav"]["conclusions"] }}
+                    <span class="badge validation-badge" data-tab="conclusions" style="display:none"></span>
                 </a>
             </li>
             <li role="presentation">
@@ -146,6 +167,9 @@
                 {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
                 <button type="button" id="validate" class="btn btn-primary">
                     {{ t["nav"]["validate"] }}
+                </button>
+                <button type="button" id="validate-all" class="btn btn-default">
+                    Validate all
                 </button>
                 {% endif %}
             </li>
@@ -162,7 +186,10 @@
 
                 <h4> {{ "short" | header }}</h4>
 
-                {{ wtf.form_field(form.short) }}
+                <div class="validation-block" id="q-short" data-question="short">
+                    {{ wtf.form_field(form.short) }}
+                    <div class="validation-msg" data-for="short"></div>
+                </div>
 
                 {{ t["q"]["short"]["text"] }}
 
@@ -185,7 +212,10 @@
                 {{ "n_studies" | text }}
                 </p>
 
-                {{ wtf.form_field(form.n_studies) }}
+                <div class="validation-block" id="q-n_studies" data-question="n_studies">
+                    {{ wtf.form_field(form.n_studies) }}
+                    <div class="validation-msg" data-for="n_studies"></div>
+                </div>
 
                 <h4>{{ "first_study" | header }}</h4>
 
@@ -193,12 +223,17 @@
                 {{ "first_study" | text }}
                 </p>
 
-                {{ wtf.form_field(form.first_study) }}
+                <div class="validation-block" id="q-first_study" data-question="first_study">
+                    {{ wtf.form_field(form.first_study) }}
+                    <div class="validation-msg" data-for="first_study"></div>
+                </div>
 
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.general_comment() }}
-                {{ ckefields.append("general_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.general_comment(id="general_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
             </div>
 
             <div class="tab-pane" id="transparency">
@@ -250,8 +285,10 @@
                 {{ ckefields.append("code_availability_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.transparency_comment() }}
-                {{ ckefields.append("transparency_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.transparency_comment(id="transparency_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
             </div>
             <div class="tab-pane" id="methods">
                 {{ rmd(t["sections"]["methods"]) }}
@@ -396,7 +433,10 @@
                 {% call render_info_block("FOR CODERS", "forcoders-kind") %}
 {{ "kindofstudy" | forcoders}}
                 {% endcall %}
-                {{ wtf.form_field(form.kindofstudy) }}
+                <div class="validation-block" id="q-kindofstudy" data-question="kindofstudy">
+                    {{ wtf.form_field(form.kindofstudy) }}
+                    <div class="validation-msg" data-for="kindofstudy"></div>
+                </div>
 
                 {{ rmd(get_header("statistical_analysis"))}}
                 {% call render_info_block("FOR CODERS", "forcoders-software") %}
@@ -407,8 +447,10 @@
                 {{ ckefields.append("statistical_analysis_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.methods_comment() }}
-                {{ ckefields.append("methods_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.methods_comment(id="methods_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
             </div>
             <div class="tab-pane" id="methodsq">
 
@@ -509,8 +551,10 @@
                 {{ ckefields.append("qmeasure10_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.methodsq_comment() }}
-                {{ ckefields.append("methodsq_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.methodsq_comment(id="methodsq_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
 
             </div>
             <div class="tab-pane" id="methodsn">
@@ -602,8 +646,10 @@
                 {{ ckefields.append("nqmeasure18_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.methodsnq_comment() }}
-                {{ ckefields.append("methodsnq_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.methodsnq_comment(id="methodsnq_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
             </div>
             <div class="tab-pane" id="results">
                 {{ rmd(t["sections"]["results"]) }}                
@@ -668,8 +714,10 @@
                 {{ ckefields.append("inferential3_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.results_comment() }}
-                {{ ckefields.append("results_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.results_comment(id="results_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
                 </div>
                 <div class="tab-pane" id="conclusions">
 
@@ -691,15 +739,45 @@
                 {{ ckefields.append("validity_e") or '' }}
                 {% if not printable %}
                 {{ rmd("#### Coder's comments") }}
-                {{ form.conclusions_comment() }}
-                {{ ckefields.append("conclusions_comment") or '' }}                {% endif %}
+                <div class="form-group">
+                    {{ form.conclusions_comment(id="conclusions_comment", class="form-control coder-comment draft-autosave", rows="6") }}
+                </div>
+                {% endif %}
                     </div>
             </div>
 
-            {% if mode == "edit" %}
-            {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
-            {% endif %}
-    </form>
+	        {% if mode == "edit" %}
+	        {{ wtf.form_field(form.save, button_map={"save": "primary"}) }}
+	        {% endif %}
+	</form>
+
+    <div class="modal fade" id="evidence-modal" tabindex="-1" role="dialog" aria-labelledby="evidence-modal-title"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xxl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="evidence-modal-title">Evidence</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if mode == "edit" %}
+                    <textarea id="evidence-editor" name="evidence-editor"></textarea>
+                    {% else %}
+                    <pre id="evidence-viewer" class="evidence-viewer"></pre>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    {% if mode == "edit" %}
+                    <span class="text-muted pull-left" id="evidence-status"></span>
+                    <button type="button" class="btn btn-primary" id="evidence-modal-done">Done</button>
+                    {% endif %}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {% else %}
     <p>
@@ -721,8 +799,15 @@
 {% endif %}
 
 
+{% if mode == "edit" %}
 {{ ckeditor.load() }}
-{% for field in ckefields[:1]  %}
-{{ ckeditor.config(name=field) }}
-{% endfor %}
+{{ ckeditor.config(name="evidence-editor") }}
+{{ ckeditor.config(name="general_comment") }}
+{{ ckeditor.config(name="transparency_comment") }}
+{{ ckeditor.config(name="methods_comment") }}
+{{ ckeditor.config(name="methodsq_comment") }}
+{{ ckeditor.config(name="methodsnq_comment") }}
+{{ ckeditor.config(name="results_comment") }}
+{{ ckeditor.config(name="conclusions_comment") }}
+{% endif %}
 {% endblock %}

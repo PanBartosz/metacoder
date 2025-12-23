@@ -385,7 +385,7 @@ validators["methodsn"].push({
 });
 
 validators["methodsn"].push({
-	name: "nqmeasure18 ",
+	name: "nqmeasure18",
 	missing: 'Answer to "18. Are manipulation checks described?" is missing.'
 });
 
@@ -443,38 +443,278 @@ validators["conclusions"].push({
 	missing: 'Answer to "Indicate the number of threats to construct validity or generalizability discussed in the paper" is missing.'
 });
 
+(function () {
+	const validateButton = document.getElementById("validate");
+	const validateAllButton = document.getElementById("validate-all");
+	const summaryEl = document.getElementById("validation-summary");
+	if (!validateButton) return;
 
-function Validate(validators, section_name) {
-	var missing = [];
-	const section = document.getElementById(section_name);
-	for (field of validators) {
-		try {
-			var input = section.querySelector('input[name="' + field.name + '"]');
-			if (input.type == "text" && input.value.trim() == "") {
-				missing.push(field.missing);
-			}
-			else if (input.type == "number" && input.value.trim() == "") {
-				missing.push(field.missing);
-			}
-			else if (input && input && input.type == "radio") {
-				var radioGroup = section.querySelectorAll('input[name="' + field.name + '"]');
-				var isAnyRadioChecked = Array.from(radioGroup).some(radio => radio.checked);
-				if (!isAnyRadioChecked) {
-					missing.push(field.missing);
-				}
-			}
-		} catch {
-			console.log(field.name)
+	const TAB_IDS = [
+		"general",
+		"transparency",
+		"methods",
+		"methodsn",
+		"methodsq",
+		"results",
+		"conclusions",
+	];
+
+	let validationActivated = false;
+
+	const escapeForSelector = (value) => {
+		if (window.CSS && CSS.escape) return CSS.escape(value);
+		return String(value).replace(/["\\]/g, "\\$&");
+	};
+
+	const getActiveTabId = () => {
+		const active = document.querySelector(".tab-pane.active");
+		return active ? active.id : null;
+	};
+
+	const getKindOfStudy = () => {
+		const selected = document.querySelector('input[name="kindofstudy"]:checked');
+		return selected ? selected.value : null;
+	};
+
+	const shouldValidateTab = (tabId) => {
+		const kind = getKindOfStudy();
+		if (tabId === "methodsn" && kind === "Q") return false;
+		if (tabId === "methodsq" && kind === "N") return false;
+		return true;
+	};
+
+	const isMissing = (sectionEl, fieldName) => {
+		const selector = `[name="${escapeForSelector(fieldName)}"]`;
+		const nodes = sectionEl.querySelectorAll(selector);
+		if (!nodes.length) return false;
+
+		const first = nodes[0];
+		const tag = first.tagName.toLowerCase();
+		const type = (first.getAttribute("type") || "").toLowerCase();
+
+		if (type === "radio") {
+			return !Array.from(nodes).some((n) => n.checked);
 		}
+		if (type === "checkbox") {
+			return !Array.from(nodes).some((n) => n.checked);
+		}
+
+		if (tag === "select") {
+			return !first.value || first.value.trim() === "";
+		}
+
+		return !first.value || first.value.trim() === "";
+	};
+
+	const clearValidationUI = (tabId) => {
+		const sectionEl = document.getElementById(tabId);
+		if (!sectionEl) return;
+
+		sectionEl.querySelectorAll(".validation-error").forEach((el) => {
+			el.classList.remove("validation-error");
+		});
+
+		sectionEl.querySelectorAll(".validation-msg").forEach((el) => {
+			el.textContent = "";
+		});
+	};
+
+	const markFieldError = (fieldName, message) => {
+		const container = document.querySelector(
+			`[data-question="${escapeForSelector(fieldName)}"]`,
+		);
+		if (container) container.classList.add("validation-error");
+
+		const msgEl = container
+			? container.querySelector(
+					`.validation-msg[data-for="${escapeForSelector(fieldName)}"]`,
+				)
+			: null;
+
+		if (msgEl) msgEl.textContent = message;
+	};
+
+	const getTabBadge = (tabId) =>
+		document.querySelector(`.validation-badge[data-tab="${escapeForSelector(tabId)}"]`);
+
+	const setTabBadge = (tabId, count) => {
+		const badge = getTabBadge(tabId);
+		if (!badge) return;
+		if (!count) {
+			badge.textContent = "";
+			badge.style.display = "none";
+			return;
+		}
+		badge.textContent = String(count);
+		badge.style.display = "";
+	};
+
+	const collectMissing = (tabId) => {
+		if (!validators[tabId]) return [];
+		if (!shouldValidateTab(tabId)) return [];
+
+		const sectionEl = document.getElementById(tabId);
+		if (!sectionEl) return [];
+
+		const missing = [];
+		for (const rule of validators[tabId]) {
+			if (isMissing(sectionEl, rule.name)) {
+				missing.push({
+					tabId,
+					fieldName: rule.name,
+					message: rule.missing,
+				});
+			}
+		}
+		return missing;
+	};
+
+	const activateTab = (tabId) => {
+		if (window.jQuery) {
+			const selector = `#main-nav a[href="#${escapeForSelector(tabId)}"]`;
+			window.jQuery(selector).tab("show");
+			return;
+		}
+
+		document
+			.querySelectorAll("#main-nav li")
+			.forEach((li) => li.classList.remove("active"));
+		const tabLink = document.querySelector(`#main-nav a[href="#${tabId}"]`);
+		if (tabLink && tabLink.parentElement) tabLink.parentElement.classList.add("active");
+		document
+			.querySelectorAll(".tab-pane")
+			.forEach((pane) => pane.classList.remove("active"));
+		const tabPane = document.getElementById(tabId);
+		if (tabPane) tabPane.classList.add("active");
+	};
+
+	const scrollToField = (fieldName) => {
+		const container = document.querySelector(
+			`[data-question="${escapeForSelector(fieldName)}"]`,
+		);
+		if (!container) return;
+		container.scrollIntoView({ behavior: "smooth", block: "center" });
+	};
+
+	const renderSummary = (items, title) => {
+		if (!summaryEl) return;
+
+		if (!items.length) {
+			summaryEl.classList.remove("alert-danger");
+			summaryEl.classList.add("alert-success");
+			summaryEl.style.display = "";
+			summaryEl.innerHTML = `<strong>All good.</strong> ${title ? title : ""}`;
+			return;
+		}
+
+		summaryEl.classList.remove("alert-success");
+		summaryEl.classList.add("alert-danger");
+		summaryEl.style.display = "";
+
+		const listItems = items
+			.map(
+				(item) =>
+					`<li><a href="#" data-validate-tab="${item.tabId}" data-validate-field="${item.fieldName}">${item.message}</a></li>`,
+			)
+			.join("");
+
+		summaryEl.innerHTML = `
+			<strong>Missing (${items.length}):</strong>
+			<ul class="validation-summary-list">${listItems}</ul>
+		`;
+	};
+
+	const runValidation = ({ tabIds, showSummary, applyUI }) => {
+		const toValidate = tabIds.filter((id) => TAB_IDS.includes(id));
+
+		const shouldApplyUI = Boolean(applyUI || showSummary || validationActivated);
+		if (shouldApplyUI) {
+			for (const tabId of toValidate) clearValidationUI(tabId);
+		}
+
+		const allMissing = [];
+		for (const tabId of toValidate) {
+			const missing = collectMissing(tabId);
+			allMissing.push(...missing);
+			if (shouldApplyUI) {
+				for (const item of missing) markFieldError(item.fieldName, item.message);
+			}
+		}
+
+		for (const tabId of TAB_IDS) {
+			const count = collectMissing(tabId).length;
+			setTabBadge(tabId, count);
+		}
+
+		if (showSummary) {
+			const title =
+				toValidate.length === 1 ? `(${toValidate[0]} tab)` : "(all tabs)";
+			renderSummary(allMissing, title);
+		}
+
+		return allMissing;
+	};
+
+	if (summaryEl) {
+		summaryEl.addEventListener("click", (e) => {
+			const link = e.target.closest("[data-validate-field]");
+			if (!link) return;
+			e.preventDefault();
+
+			const tabId = link.dataset.validateTab;
+			const fieldName = link.dataset.validateField;
+			if (!tabId || !fieldName) return;
+
+			activateTab(tabId);
+			window.setTimeout(() => scrollToField(fieldName), 50);
+		});
 	}
-	if (missing.length == 0) { missing.push("Everything is OK") };
-	alert(missing.join("\n"));
-}
 
-var validate_button = document.getElementById("validate");
-validate_button.onclick = function () {
-	let section_name = document.querySelector('.tab-pane.active').id;
-	Validate(validators[section_name], section_name)
-}
+	validateButton.addEventListener("click", () => {
+		const tabId = getActiveTabId();
+		if (!tabId) return;
+		validationActivated = true;
+		runValidation({ tabIds: [tabId], showSummary: true });
+	});
 
+	if (validateAllButton) {
+		validateAllButton.addEventListener("click", () => {
+			validationActivated = true;
+			runValidation({ tabIds: TAB_IDS, showSummary: true });
+		});
+	}
 
+	const formEl = document.querySelector("form");
+	if (formEl) {
+		let liveTimeoutId = null;
+		const schedule = (tabId) => {
+			if (!TAB_IDS.includes(tabId)) return;
+			if (liveTimeoutId) window.clearTimeout(liveTimeoutId);
+				liveTimeoutId = window.setTimeout(() => {
+				runValidation({
+					tabIds: [tabId],
+					showSummary: false,
+					applyUI: validationActivated,
+				});
+			}, 250);
+		};
+
+		formEl.addEventListener("change", (e) => {
+			const pane = e.target.closest(".tab-pane");
+			if (!pane) return;
+			schedule(pane.id);
+		});
+
+		formEl.addEventListener("input", (e) => {
+			const pane = e.target.closest(".tab-pane");
+			if (!pane) return;
+			schedule(pane.id);
+		});
+	}
+
+	runValidation({
+		tabIds: [getActiveTabId() || "general"],
+		showSummary: false,
+		applyUI: false,
+	});
+})();
