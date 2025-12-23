@@ -1,0 +1,337 @@
+:root {
+  --app-bg: #f6f7fb;
+  --app-surface: #ffffff;
+  --app-border: #e5e7eb;
+  --app-text: #1f2937;
+  --app-muted: #6b7280;
+  --app-primary: #2d5f7b;
+  --app-primary-hover: #244e66;
+  --app-focus: #3b82f6;
+  --app-danger: #b42318;
+  --app-radius: 12px;
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --app-font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body.app-body {
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--app-font-sans);
+  line-height: 1.45;
+}
+
+a {
+  color: var(--app-primary);
+}
+
+a:hover,
+a:focus {
+  color: var(--app-primary-hover);
+}
+
+.app-navbar {
+  margin-bottom: 0;
+  border: 0;
+  border-bottom: 1px solid var(--app-border);
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.app-navbar .navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--app-text);
+}
+
+.app-navbar .navbar-brand .app-navbar-article {
+  display: inline-block;
+  max-width: 320px;
+  margin-left: 10px;
+  padding: 3px 8px;
+  border: 1px solid var(--app-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--app-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-navbar .navbar-nav > li > a {
+  color: var(--app-muted);
+}
+
+.app-navbar .navbar-nav > .active > a,
+.app-navbar .navbar-nav > .active > a:hover,
+.app-navbar .navbar-nav > .active > a:focus {
+  background: transparent;
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+.app-navbar .navbar-text.app-navbar-user {
+  color: var(--app-muted);
+}
+
+.app-main {
+  padding: 18px 0 40px;
+}
+
+.app-main > .container:not(.app-flashes) {
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  box-shadow: var(--app-shadow);
+  padding: 20px 22px;
+}
+
+.app-main > .container:not(.app-flashes) > :first-child {
+  margin-top: 0;
+}
+
+.app-flashes {
+  margin-top: 18px;
+}
+
+.alert {
+  border-radius: var(--app-radius);
+  border: 1px solid transparent;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+
+.alert-info {
+  background: #eef6ff;
+  border-color: #cfe6ff;
+  color: #0b3b66;
+}
+
+.alert-warning {
+  background: #fff7ed;
+  border-color: #ffedd5;
+  color: #7c2d12;
+}
+
+.alert-danger {
+  background: #fff1f2;
+  border-color: #ffe4e6;
+  color: #7f1d1d;
+}
+
+.alert-success {
+  background: #ecfdf5;
+  border-color: #d1fae5;
+  color: #065f46;
+}
+
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  background-image: none;
+  box-shadow: none;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.btn:focus,
+.btn:active:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.btn-primary {
+  background: var(--app-primary);
+  border-color: var(--app-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: var(--app-primary-hover);
+  border-color: var(--app-primary-hover);
+}
+
+.btn-danger {
+  background: var(--app-danger);
+  border-color: var(--app-danger);
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background: #8f1b12;
+  border-color: #8f1b12;
+}
+
+.btn-info {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.btn-info:hover,
+.btn-info:focus {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.btn-default {
+  background: #ffffff;
+  border-color: var(--app-border);
+  color: var(--app-text);
+}
+
+.btn-default:hover,
+.btn-default:focus {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: var(--app-text);
+}
+
+.form-control {
+  border-radius: 10px;
+  border-color: var(--app-border);
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: rgba(59, 130, 246, 0.65);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+}
+
+/* Login/register templates use unclassed WTForms inputs */
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="number"],
+form input[type="url"],
+form input[type="search"],
+form select,
+form textarea {
+  max-width: 100%;
+}
+
+form input:not(.btn):not(.form-control):not([type="checkbox"]):not([type="radio"]) {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: var(--app-text);
+  background: #ffffff;
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+}
+
+form input:not(.btn):not(.form-control):not([type="checkbox"]):not([type="radio"]):focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.65);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22);
+}
+
+.panel {
+  border-radius: var(--app-radius);
+  border-color: var(--app-border);
+  box-shadow: var(--app-shadow);
+  background: var(--app-surface);
+}
+
+.panel-heading {
+  border-top-left-radius: var(--app-radius);
+  border-top-right-radius: var(--app-radius);
+  background: #f9fafb !important;
+  border-color: var(--app-border) !important;
+}
+
+.panel-title a {
+  color: var(--app-text);
+  text-decoration: none;
+}
+
+.panel-title a:hover,
+.panel-title a:focus {
+  color: var(--app-primary-hover);
+  text-decoration: underline;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid var(--app-border);
+}
+
+.nav-tabs > li > a {
+  border-radius: 10px 10px 0 0;
+  color: var(--app-muted);
+}
+
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  color: var(--app-text);
+  background: #f9fafb;
+  border-color: var(--app-border);
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: var(--app-text);
+  background: #ffffff;
+  border: 1px solid var(--app-border);
+  border-bottom-color: transparent;
+  font-weight: 600;
+}
+
+.table {
+  background: #ffffff;
+}
+
+.table > thead > tr > th {
+  background: #f9fafb;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  border-top: 1px solid var(--app-border);
+}
+
+@media print {
+  .app-navbar,
+  .app-flashes {
+    display: none !important;
+  }
+
+  body.app-body {
+    background: #ffffff;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-main {
+    padding: 14px 0 28px;
+  }
+
+  .app-main > .container:not(.app-flashes) {
+    padding: 16px;
+  }
+
+  .app-navbar .navbar-brand .app-navbar-article {
+    max-width: 180px;
+    padding: 2px 6px;
+  }
+}
